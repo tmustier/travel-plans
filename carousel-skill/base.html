@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+  Nexcade Carousel Template
+  =========================
+  A single-file horizontal carousel for internal presentations and field guides.
+  Each slide fits one screen. No vertical scrolling.
+
+  How to use:
+  1. Copy this file, rename it
+  2. Edit the slideNames array in the <script> block (drives ToC + bottom bar)
+  3. Replace the example slides with your content
+  4. Each slide: <div class="slide"><div class="slide-inner"> ... </div></div>
+
+  Available component classes are documented in README.md.
+  Browse Tabler Icons at https://tabler.io/icons
+-->
+<title>YOUR TITLE | Nexcade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+/* ============================================================
+   NEXCADE CAROUSEL TEMPLATE
+   Do not edit this CSS unless updating the brand system.
+   All content goes in the HTML slides below.
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* --- BRAND TOKENS (from commercial-assets/templates/one-pager/styles/tokens.brand.css) --- */
+:root {
+  --bg: #f4f6f9; --bg-alt: #e9f1f4; --bg-card: #ffffff;
+  --text: #161d24; --text-secondary: #344755; --text-muted: #667784;
+  --accent: #56778d; --accent-light: #edf4f7; --accent-hover: #476878;
+  --ink: #161d24;
+  --navy: #161d24; --navy-light: #edf4f7;
+  --amber: #c49234; --amber-light: #faf3e6;
+  --green: #4e8977; --green-light: #e8f4f0;
+  --red: #8f4949; --red-light: #f7eded;
+  --border: #d4e2e8; --border-strong: #9badb8;
+  --gradient-start: #f8b1e2; --gradient-end: #f9ab82;
+  --gradient-start-strong: #f29ee0; --gradient-end-strong: #f79663;
+  --font-display: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --space-xs: 0.4rem; --space-sm: 0.6rem; --space-md: 1rem; --space-lg: 1.5rem; --space-xl: 2.5rem;
+  --radius-xs: 8px; --radius-sm: 12px; --radius-md: 18px;
+}
+
+/* --- BASE --- */
+html { font-size: 16px; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.55; -webkit-font-smoothing: antialiased; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+/* --- CAROUSEL MECHANICS --- */
+.carousel { flex: 1; overflow: hidden; position: relative; }
+.carousel-track { display: flex; height: 100%; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); will-change: transform; }
+.slide { flex: 0 0 100%; height: 100%; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.slide-inner { width: 100%; max-width: 920px; padding: 0 2.5rem; }
+
+/* --- BOTTOM BAR --- */
+.bottom-bar { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 1.5rem; border-top: 1px solid var(--border); background: var(--bg-card); flex-shrink: 0; gap: var(--space-md); user-select: none; }
+.bar-nav { display: flex; align-items: center; gap: 6px; }
+.bar-btn { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--border-strong); background: var(--bg-card); color: var(--text-secondary); font-size: 1rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; flex-shrink: 0; }
+.bar-btn:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); color: white; }
+.bar-btn:disabled { opacity: 0.3; cursor: default; }
+.bar-dots { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; justify-content: center; }
+.bar-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border-strong); cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+.bar-dot:hover { background: var(--text-muted); }
+.bar-dot.active { background: var(--accent); width: 22px; border-radius: 4px; }
+.bar-label { font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; text-align: right; flex-shrink: 0; }
+.bar-label strong { color: var(--text-secondary); font-weight: 600; }
+.bar-keys { font-size: 0.62rem; color: var(--text-muted); flex-shrink: 0; }
+.bar-keys kbd { display: inline-block; padding: 1px 4px; border: 1px solid var(--border-strong); border-radius: 3px; font-family: var(--font-body); font-size: 0.6rem; background: var(--bg-alt); }
+
+/* --- TYPOGRAPHY --- */
+.sn { font-family: var(--font-display); font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 2px; letter-spacing: 0.02em; }
+.sh { font-family: var(--font-display); font-weight: 700; line-height: 1.12; letter-spacing: -0.025em; color: var(--text); margin-bottom: var(--space-sm); font-variation-settings: 'opsz' 72; }
+.sh.hero-h { font-size: clamp(2.2rem, 4.5vw, 3.2rem); font-weight: 800; font-variation-settings: 'opsz' 144; }
+.sh.sec-h { font-size: clamp(1.5rem, 3vw, 2rem); }
+.sh3 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; line-height: 1.25; color: var(--text); margin-top: var(--space-lg); margin-bottom: var(--space-xs); }
+.lead { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: var(--space-md); max-width: 62ch; }
+p { margin-bottom: var(--space-sm); max-width: 65ch; font-size: 0.88rem; }
+
+/* --- HERO + TOC (title slide) --- */
+.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+.hero-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-sm); display: flex; align-items: center; gap: var(--space-sm); }
+.hero-label::before { content: ''; display: block; width: 28px; height: 3px; background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end)); border-radius: 2px; }
+.hero-meta { margin-top: var(--space-lg); display: flex; gap: var(--space-md) var(--space-xl); font-size: 0.78rem; color: var(--text-muted); flex-wrap: wrap; }
+.hero-meta strong { color: var(--text-secondary); font-weight: 600; }
+.toc { list-style: none; }
+.toc li { border-bottom: 1px solid var(--border); }
+.toc li:first-child { border-top: 1px solid var(--border); }
+.toc a { display: flex; align-items: center; gap: var(--space-md); padding: 0.55rem 0; text-decoration: none; color: var(--text-secondary); font-size: 0.85rem; transition: color 0.15s; }
+.toc a:hover { color: var(--accent); }
+.toc .toc-num { font-family: var(--font-display); font-weight: 700; font-size: 0.82rem; color: var(--text-muted); width: 1.8rem; flex-shrink: 0; }
+.toc .toc-title { font-weight: 500; }
+
+/* --- PULL QUOTE (gradient border) --- */
+.pq { padding: var(--space-md) 0 var(--space-md) var(--space-lg); border-left: 3px solid; border-image: linear-gradient(180deg, var(--gradient-start), var(--gradient-end)) 1; margin: var(--space-md) 0; max-width: 55ch; }
+.pq p { font-family: var(--font-display); font-size: 1.05rem; font-weight: 400; font-style: italic; line-height: 1.45; color: var(--text); font-variation-settings: 'opsz' 24; margin-bottom: 0; }
+.pq cite { display: block; margin-top: var(--space-xs); font-family: var(--font-body); font-style: normal; font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
+
+/* --- CARDS (use .c3 or .c4 for column count) --- */
+.cards { display: grid; gap: var(--space-sm); margin: var(--space-md) 0; }
+.cards.c3 { grid-template-columns: repeat(3, 1fr); }
+.cards.c4 { grid-template-columns: repeat(4, 1fr); }
+.card { padding: var(--space-sm) var(--space-md); border: 1px solid var(--border); border-radius: var(--radius-xs); background: var(--bg-card); }
+.card-icon { font-size: 1.2rem; margin-bottom: 2px; color: var(--accent); }
+.card h4 { font-family: var(--font-display); font-size: 0.88rem; font-weight: 600; line-height: 1.25; margin-bottom: 2px; }
+.card p { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.45; margin-bottom: 0; }
+.card.highlight { border-color: var(--accent); background: var(--accent-light); }
+.card.gradient-border { border-image: linear-gradient(180deg, var(--gradient-start), var(--gradient-end)) 1; }
+
+/* --- TWO-COLUMN LAYOUT --- */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); align-items: start; }
+
+/* --- ALERT BOX (left-border accent) --- */
+.alert { padding: var(--space-sm) var(--space-md); border-radius: var(--radius-xs); border-left: 4px solid var(--red); background: var(--red-light); margin-bottom: var(--space-md); }
+.alert.info { border-left-color: var(--accent); background: var(--accent-light); }
+.alert.warn { border-left-color: var(--amber); background: var(--amber-light); }
+.alert.success { border-left-color: var(--green); background: var(--green-light); }
+.alert h4 { font-family: var(--font-display); font-weight: 700; font-size: 0.88rem; color: var(--red); margin-bottom: 2px; }
+.alert.info h4 { color: var(--accent); }
+.alert.warn h4 { color: var(--amber); }
+.alert.success h4 { color: var(--green); }
+.alert p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.45; margin-bottom: 0; }
+
+/* --- MAP TABLE (two-column reference table) --- */
+.map-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+.map-table th { text-align: left; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); padding: var(--space-xs) var(--space-sm); border-bottom: 2px solid var(--border-strong); }
+.map-table td { padding: var(--space-xs) var(--space-sm); border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.4; }
+.map-table tr:last-child td { border-bottom: none; }
+.map-table td:first-child { font-weight: 600; color: var(--text); white-space: nowrap; }
+.map-table td:nth-child(2) { color: var(--text-secondary); }
+.map-code { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.72rem; color: var(--accent); background: var(--accent-light); padding: 0 4px; border-radius: 3px; white-space: nowrap; }
+
+/* --- PIPELINE (horizontal numbered steps with chevrons) --- */
+.pipeline { display: flex; gap: 0; margin: var(--space-md) 0; }
+.pipe-step { flex: 1; min-width: 0; position: relative; text-align: center; padding: var(--space-sm) var(--space-xs); }
+.pipe-step::after { content: ''; position: absolute; top: 22px; right: -2px; width: 11px; height: 11px; border-top: 2px solid var(--border-strong); border-right: 2px solid var(--border-strong); transform: rotate(45deg); z-index: 1; }
+.pipe-step:last-child::after { display: none; }
+.pipe-num { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; font-family: var(--font-display); font-weight: 700; font-size: 0.68rem; margin-bottom: 4px; color: white; background: var(--ink); }
+.pipe-step:nth-child(even) .pipe-num { background: var(--accent); }
+.pipe-name { display: block; font-size: 0.68rem; font-weight: 600; line-height: 1.25; color: var(--text); margin-bottom: 1px; }
+.pipe-detail { font-size: 0.6rem; color: var(--text-muted); line-height: 1.25; }
+
+/* --- CASCADE (ranked tiers, e.g. priority fallback) --- */
+.cascade { display: flex; flex-direction: column; gap: 2px; margin: var(--space-sm) 0; max-width: 480px; }
+.cascade-tier { display: flex; align-items: center; gap: var(--space-md); padding: var(--space-xs) var(--space-md); border-radius: 4px; font-size: 0.8rem; }
+.cascade-rank { font-family: var(--font-display); font-weight: 800; font-size: 0.92rem; width: 1.5rem; flex-shrink: 0; }
+.cascade-name { font-weight: 600; }
+.cascade-desc { font-size: 0.7rem; color: var(--text-secondary); margin-left: auto; }
+.cascade-tier.t1 { background: #fdf0f8; } .cascade-tier.t1 .cascade-rank { color: #c06090; }
+.cascade-tier.t2 { background: var(--accent-light); } .cascade-tier.t2 .cascade-rank { color: var(--accent); }
+.cascade-tier.t3 { background: var(--bg-alt); } .cascade-tier.t3 .cascade-rank { color: var(--text-secondary); }
+.cascade-tier.t4 { background: var(--bg); } .cascade-tier.t4 .cascade-rank { color: var(--text-muted); }
+
+/* --- SPECTRUM (gradient bar with labels) --- */
+.spectrum-wrap { padding: var(--space-md); border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-card); margin-bottom: var(--space-md); }
+.spectrum-title { font-family: var(--font-display); font-weight: 600; font-size: 0.88rem; margin-bottom: var(--space-xs); }
+.spectrum { position: relative; height: 44px; border-radius: 22px; background: linear-gradient(90deg, var(--green-light), var(--amber-light) 50%, var(--red-light)); border: 1px solid var(--border); margin-bottom: var(--space-xs); display: flex; align-items: center; overflow: hidden; }
+.spectrum-fill-high { position: absolute; left: 0; top: 0; bottom: 0; width: 35%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 600; color: var(--green); }
+.spectrum-fill-low { position: absolute; right: 0; top: 0; bottom: 0; width: 30%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 600; color: var(--red); }
+.spectrum-labels { display: flex; justify-content: space-between; font-size: 0.7rem; }
+.spectrum-labels span:first-child { color: var(--green); font-weight: 600; }
+.spectrum-labels span:last-child { color: var(--red); font-weight: 600; }
+
+/* --- GEO GRID (4-column place cards) --- */
+.geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-sm); margin: var(--space-md) 0; }
+.geo-city { padding: var(--space-sm) var(--space-md); border: 1px solid var(--border); border-radius: var(--radius-xs); background: var(--bg-card); }
+.geo-city h5 { font-family: var(--font-display); font-weight: 700; font-size: 0.88rem; margin-bottom: 1px; }
+.geo-city p { font-size: 0.72rem; color: var(--text-muted); line-height: 1.35; margin-bottom: 0; }
+
+/* --- NUMBERED RULES (ordered list with large counters) --- */
+.rules { list-style: none; counter-reset: rule; }
+.rules li { counter-increment: rule; padding: var(--space-xs) 0; border-bottom: 1px solid var(--border); display: flex; gap: var(--space-md); align-items: baseline; }
+.rules li::before { content: counter(rule, decimal-leading-zero); font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--accent); flex-shrink: 0; width: 2rem; }
+.rule-text strong { display: block; font-family: var(--font-display); font-weight: 600; font-size: 0.88rem; margin-bottom: 1px; }
+.rule-text span { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4; }
+
+/* --- RATE SOURCE GRID (3-column provider cards) --- */
+.rate-sources { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-sm); margin: var(--space-md) 0; }
+.rate-src { padding: var(--space-sm) var(--space-md); border: 1px solid var(--border); border-radius: var(--radius-xs); background: var(--bg-card); }
+.rate-src-type { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; }
+.rate-src-type.api { color: var(--accent); } .rate-src-type.rms { color: var(--navy); } .rate-src-type.email { color: var(--green); } .rate-src-type.contract { color: var(--amber); }
+.rate-src h5 { font-family: var(--font-display); font-size: 0.82rem; font-weight: 600; margin-bottom: 1px; }
+.rate-src p { font-size: 0.7rem; color: var(--text-muted); line-height: 1.35; margin-bottom: 0; }
+.live-badge { display: inline-block; font-size: 0.55rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; background: var(--green-light); color: var(--green); padding: 0 5px; border-radius: 3px; margin-left: 3px; vertical-align: middle; }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .hero-grid, .two-col { grid-template-columns: 1fr; }
+  .cards.c3, .cards.c4 { grid-template-columns: 1fr 1fr; }
+  .geo-grid, .rate-sources { grid-template-columns: 1fr 1fr; }
+  .slide-inner { padding: 0 1rem; }
+  .bar-label, .bar-keys { display: none; }
+}
+
+/* --- PRINT (PDF export via to-pdf.sh) ---
+   Chrome headless print collapses grids and strips backgrounds.
+   These overrides keep layouts intact and colours visible.
+   If you add a new grid component class, add it here too. */
+@page { size: 13.333in 7.5in; margin: 0; }
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+  body { overflow: visible !important; height: auto !important; display: block !important; }
+  .carousel { overflow: visible !important; position: static !important; flex: none !important; }
+  .carousel-track { display: block !important; transform: none !important; transition: none !important; height: auto !important; }
+  .slide {
+    width: 13.333in !important; height: 7.5in !important;
+    page-break-after: always !important; break-after: page !important;
+    page-break-inside: avoid !important; break-inside: avoid !important;
+    flex: none !important; display: flex !important;
+    overflow: hidden !important;
+  }
+  .slide:last-child { page-break-after: auto !important; break-after: auto !important; }
+  .slide-inner { max-width: 1100px !important; padding: 0 3rem !important; }
+  .bottom-bar { display: none !important; }
+  /* Force grids to stay multi-column */
+  .hero-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 3rem !important; }
+  .two-col { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 1.5rem !important; }
+  .cards.c3 { grid-template-columns: repeat(3, 1fr) !important; }
+  .cards.c4 { grid-template-columns: repeat(4, 1fr) !important; }
+  .geo-grid { grid-template-columns: repeat(4, 1fr) !important; }
+  .rate-sources { grid-template-columns: repeat(3, 1fr) !important; }
+  .pipeline { display: flex !important; }
+  /* Force backgrounds to print */
+  .card, .card.highlight, .card.gradient-border,
+  .cascade-tier, .cascade-tier.t1, .cascade-tier.t2, .cascade-tier.t3, .cascade-tier.t4,
+  .alert, .spectrum-wrap, .spectrum, .geo-city, .rate-src, .pipe-num {
+    -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="carousel">
+<div class="carousel-track" id="carousel-track">
+
+<!-- =====================================================================
+     SLIDES START HERE
+     Each slide: <div class="slide"><div class="slide-inner"> ... </div></div>
+     All content must fit one screen. No vertical scrolling.
+     ===================================================================== -->
+
+<!-- SLIDE 0: TITLE + TABLE OF CONTENTS (always first) -->
+<div class="slide"><div class="slide-inner">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-label">Nexcade Internal</div>
+      <h1 class="sh hero-h">Your Presentation<br>Title Here</h1>
+      <p style="font-size:0.95rem; color:var(--text-secondary); line-height:1.5; max-width:420px">A brief description of what this presentation covers and who it's for.</p>
+      <div class="hero-meta">
+        <span><strong>Source</strong> Author Name</span>
+        <span><strong>Date</strong> DD Mon YYYY</span>
+        <span><strong>For</strong> Audience</span>
+      </div>
+    </div>
+    <div>
+      <!-- TOC auto-generates from slideNames array in JS -->
+      <ol class="toc" id="toc"></ol>
+    </div>
+  </div>
+</div></div>
+
+<!-- SLIDE 1: EXAMPLE - Two-column with pull quote + cards -->
+<div class="slide"><div class="slide-inner">
+  <div class="sn">01</div>
+  <h2 class="sh sec-h">Two-Column Layout</h2>
+  <div class="two-col">
+    <div>
+      <p class="lead">The lead paragraph sets context. Keep it to 2-3 lines max.</p>
+      <div class="pq">
+        <p>Pull quotes use the agentic gradient border. Good for highlighting key statements from a speaker or source.</p>
+        <cite>Speaker Name</cite>
+      </div>
+      <p>Supporting body text goes here. Keep it brief to fit one screen.</p>
+    </div>
+    <div class="cards c1" style="grid-template-columns:1fr">
+      <div class="card"><div class="card-icon"><i class="ti ti-bulb"></i></div><h4>Card title</h4><p>Card description text. Keep to 1-2 lines.</p></div>
+      <div class="card"><div class="card-icon"><i class="ti ti-chart-bar"></i></div><h4>Another card</h4><p>Use Tabler Icons for card icons. Browse at tabler.io/icons.</p></div>
+      <div class="card highlight"><div class="card-icon"><i class="ti ti-star"></i></div><h4>Highlighted card</h4><p>Add .highlight class to emphasise one card.</p></div>
+    </div>
+  </div>
+</div></div>
+
+<!-- SLIDE 2: EXAMPLE - Three-column cards -->
+<div class="slide"><div class="slide-inner">
+  <div class="sn">02</div>
+  <h2 class="sh sec-h">Three-Column Cards</h2>
+  <p class="lead">Use .cards.c3 for a three-column grid. Good for listing 3-6 items.</p>
+  <div class="cards c3">
+    <div class="card"><div class="card-icon"><i class="ti ti-rocket"></i></div><h4>First item</h4><p>Short description that fits the card without overflowing.</p></div>
+    <div class="card"><div class="card-icon"><i class="ti ti-shield-check"></i></div><h4>Second item</h4><p>All cards in a row should have similar content length.</p></div>
+    <div class="card"><div class="card-icon"><i class="ti ti-users"></i></div><h4>Third item</h4><p>If you need more than 6, consider splitting across slides.</p></div>
+  </div>
+</div></div>
+
+<!-- SLIDE 3: EXAMPLE - Pipeline + table -->
+<div class="slide"><div class="slide-inner">
+  <div class="sn">03</div>
+  <h2 class="sh sec-h">Pipeline + Table</h2>
+  <p class="lead">Pipelines show sequential processes. Tables show structured reference data.</p>
+  <div class="pipeline">
+    <div class="pipe-step"><div class="pipe-num">1</div><span class="pipe-name">Step one</span><span class="pipe-detail">Brief detail</span></div>
+    <div class="pipe-step"><div class="pipe-num">2</div><span class="pipe-name">Step two</span><span class="pipe-detail">Brief detail</span></div>
+    <div class="pipe-step"><div class="pipe-num">3</div><span class="pipe-name">Step three</span><span class="pipe-detail">Brief detail</span></div>
+    <div class="pipe-step"><div class="pipe-num">4</div><span class="pipe-name">Step four</span><span class="pipe-detail">Brief detail</span></div>
+  </div>
+  <div class="two-col" style="margin-top:var(--space-md)">
+    <div>
+      <h3 class="sh3" style="margin-top:0">Reference table</h3>
+      <p>Use .map-table for two-column reference data. Use .map-code for inline code-style terms.</p>
+    </div>
+    <div>
+      <table class="map-table">
+        <tr><th>Term</th><th>Definition</th></tr>
+        <tr><td>First term</td><td>Explanation with <span class="map-code">CodeTerm</span></td></tr>
+        <tr><td>Second term</td><td>Another explanation</td></tr>
+        <tr><td>Third term</td><td>Keep rows concise</td></tr>
+      </table>
+    </div>
+  </div>
+</div></div>
+
+<!-- SLIDE 4: EXAMPLE - Alert + cascade -->
+<div class="slide"><div class="slide-inner">
+  <div class="sn">04</div>
+  <h2 class="sh sec-h">Alerts + Cascade</h2>
+  <div class="two-col">
+    <div>
+      <div class="alert"><h4>Red alert (default)</h4><p>Use for warnings or critical context.</p></div>
+      <div class="alert info"><h4>Info alert</h4><p>Use .alert.info for neutral callouts.</p></div>
+      <div class="alert warn"><h4>Warning alert</h4><p>Use .alert.warn for caution notes.</p></div>
+      <div class="alert success"><h4>Success alert</h4><p>Use .alert.success for positive notes.</p></div>
+    </div>
+    <div>
+      <h3 class="sh3" style="margin-top:0">Priority cascade</h3>
+      <p>Shows ranked tiers with visual hierarchy.</p>
+      <div class="cascade">
+        <div class="cascade-tier t1"><span class="cascade-rank">1</span><span class="cascade-name">Highest priority</span><span class="cascade-desc">Most specific</span></div>
+        <div class="cascade-tier t2"><span class="cascade-rank">2</span><span class="cascade-name">Second tier</span><span class="cascade-desc">Fallback</span></div>
+        <div class="cascade-tier t3"><span class="cascade-rank">3</span><span class="cascade-name">Third tier</span><span class="cascade-desc">Broader</span></div>
+        <div class="cascade-tier t4"><span class="cascade-rank">4</span><span class="cascade-name">Default</span><span class="cascade-desc">Catch-all</span></div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- SLIDE 5: EXAMPLE - Numbered rules -->
+<div class="slide"><div class="slide-inner">
+  <div class="sn">05</div>
+  <h2 class="sh sec-h">Numbered Rules</h2>
+  <p class="lead">Use two-column .rules lists for principles, takeaways, or action items.</p>
+  <div class="two-col">
+    <ol class="rules">
+      <li><div class="rule-text"><strong>First rule title</strong><span>Supporting explanation text, kept to one or two lines.</span></div></li>
+      <li><div class="rule-text"><strong>Second rule title</strong><span>Another brief explanation.</span></div></li>
+      <li><div class="rule-text"><strong>Third rule title</strong><span>Keep the list balanced between columns.</span></div></li>
+    </ol>
+    <ol class="rules" style="counter-reset:rule 3">
+      <li><div class="rule-text"><strong>Fourth rule title</strong><span>Note: set counter-reset on the second list to continue numbering.</span></div></li>
+      <li><div class="rule-text"><strong>Fifth rule title</strong><span>Works well for 4-8 items split across two columns.</span></div></li>
+    </ol>
+  </div>
+</div></div>
+
+<!-- =====================================================================
+     SLIDES END HERE
+     ===================================================================== -->
+
+</div><!-- /carousel-track -->
+</div><!-- /carousel -->
+
+<!-- BOTTOM NAVIGATION BAR (do not edit) -->
+<div class="bottom-bar">
+  <div class="bar-nav"><button class="bar-btn" id="prev-btn" aria-label="Previous">&#8592;</button><button class="bar-btn" id="next-btn" aria-label="Next">&#8594;</button></div>
+  <div class="bar-dots" id="bar-dots"></div>
+  <div class="bar-keys"><kbd>&#8592;</kbd> <kbd>&#8594;</kbd></div>
+  <div class="bar-label" id="bar-label"></div>
+</div>
+
+<script>
+/* ============================================================
+   CAROUSEL ENGINE (generic, do not edit)
+   Only edit the slideNames array below.
+   ============================================================ */
+
+// --- EDIT THIS: one entry per slide, drives ToC + bottom bar label ---
+const slideNames = [
+  'Your Presentation Title',
+  '01 · Two-Column Layout',
+  '02 · Three-Column Cards',
+  '03 · Pipeline + Table',
+  '04 · Alerts + Cascade',
+  '05 · Numbered Rules'
+];
+
+// --- TOC auto-builder (generates from slideNames, skips index 0) ---
+const tocEl = document.getElementById('toc');
+slideNames.forEach((name, i) => {
+  if (i === 0) return;
+  const li = document.createElement('li');
+  const a = document.createElement('a');
+  a.href = '#';
+  a.onclick = (e) => { e.preventDefault(); goTo(i); };
+  const numMatch = name.match(/^(\d+)/);
+  a.innerHTML = `<span class="toc-num">${numMatch ? numMatch[1] : ''}</span><span class="toc-title">${name.replace(/^\d+\s*·\s*/, '')}</span>`;
+  li.appendChild(a);
+  tocEl.appendChild(li);
+});
+
+// --- Carousel navigation ---
+const track = document.getElementById('carousel-track');
+const slides = track.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let currentSlide = 0;
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const dotsC = document.getElementById('bar-dots');
+const labelEl = document.getElementById('bar-label');
+
+slideNames.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'bar-dot';
+  d.onclick = () => goTo(i);
+  dotsC.appendChild(d);
+});
+
+function goTo(idx) {
+  if (idx < 0 || idx >= totalSlides) return;
+  currentSlide = idx;
+  track.style.transform = `translateX(-${idx * 100}%)`;
+  dotsC.querySelectorAll('.bar-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+  labelEl.innerHTML = `<strong>${slideNames[idx]}</strong>`;
+  prevBtn.disabled = idx === 0;
+  nextBtn.disabled = idx === totalSlides - 1;
+}
+
+prevBtn.onclick = () => goTo(currentSlide - 1);
+nextBtn.onclick = () => goTo(currentSlide + 1);
+
+// Keyboard: arrow keys
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowRight') { e.preventDefault(); goTo(currentSlide + 1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(currentSlide - 1); }
+});
+
+// Touch: swipe left/right
+let touchX = 0;
+const carousel = document.querySelector('.carousel');
+carousel.addEventListener('touchstart', e => { touchX = e.changedTouches[0].screenX; }, { passive: true });
+carousel.addEventListener('touchend', e => {
+  const diff = touchX - e.changedTouches[0].screenX;
+  if (Math.abs(diff) > 60) { diff > 0 ? goTo(currentSlide + 1) : goTo(currentSlide - 1); }
+}, { passive: true });
+
+goTo(0);
+</script>
+</body>
+</html>

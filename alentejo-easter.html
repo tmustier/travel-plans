@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alentejo, Easter 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  /* Alentejo palette */
+  --cream: #faf7f2;
+  --cream-warm: #f5efe6;
+  --stone: #e8e0d4;
+  --stone-mid: #d4c9ba;
+  --terracotta: #c67a4a;
+  --terracotta-light: #f7ece4;
+  --terracotta-deep: #a85e33;
+  --olive: #6b7c5e;
+  --olive-light: #e8ede4;
+  --olive-muted: #8a9a7c;
+  --golden: #d4a853;
+  --golden-light: #faf3e2;
+  --ink: #2c2418;
+  --ink-soft: #4a3f32;
+  --ink-muted: #8a7e6f;
+  --ink-faint: #b5aa9a;
+  --white: #ffffff;
+  --border: #e0d6c8;
+
+  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+html { font-size: 16px; }
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- CAROUSEL --- */
+.carousel { flex: 1; overflow: hidden; position: relative; }
+.carousel-track { display: flex; height: 100%; transition: transform 0.6s cubic-bezier(0.16,1,0.3,1); will-change: transform; }
+.slide { flex: 0 0 100%; height: 100%; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; }
+.slide-inner { width: 100%; max-width: 960px; padding: 0 2.5rem; position: relative; z-index: 2; }
+
+/* --- BOTTOM BAR --- */
+.bottom-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.5rem 1.5rem; border-top: 1px solid var(--border);
+  background: var(--white); flex-shrink: 0; gap: 1rem; user-select: none;
+}
+.bar-nav { display: flex; align-items: center; gap: 6px; }
+.bar-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--stone-mid); background: var(--white);
+  color: var(--ink-soft); font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.15s; flex-shrink: 0;
+}
+.bar-btn:hover:not(:disabled) { background: var(--terracotta); border-color: var(--terracotta); color: white; }
+.bar-btn:disabled { opacity: 0.3; cursor: default; }
+.bar-dots { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; justify-content: center; }
+.bar-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--stone-mid); cursor: pointer; transition: all 0.2s; flex-shrink: 0;
+}
+.bar-dot:hover { background: var(--ink-muted); }
+.bar-dot.active { background: var(--terracotta); width: 22px; border-radius: 4px; }
+.bar-label { font-size: 0.72rem; color: var(--ink-muted); white-space: nowrap; text-align: right; flex-shrink: 0; }
+.bar-label strong { color: var(--ink-soft); font-weight: 600; }
+.bar-keys { font-size: 0.62rem; color: var(--ink-muted); flex-shrink: 0; }
+.bar-keys kbd {
+  display: inline-block; padding: 1px 4px;
+  border: 1px solid var(--stone-mid); border-radius: 3px;
+  font-family: var(--font-body); font-size: 0.6rem; background: var(--cream);
+}
+
+/* ===================================
+   TYPOGRAPHY
+   =================================== */
+.serif { font-family: var(--font-display); }
+.sn {
+  font-family: var(--font-body); font-size: 0.68rem; font-weight: 600;
+  color: var(--terracotta); letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+h1.hero {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: clamp(3.5rem, 8vw, 6rem); line-height: 0.95;
+  letter-spacing: -0.03em; color: var(--ink);
+}
+h1.hero em { font-style: italic; font-weight: 300; }
+h2.section {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem); line-height: 1.1;
+  letter-spacing: -0.02em; color: var(--ink); margin-bottom: 0.6rem;
+}
+h3.sub {
+  font-family: var(--font-display); font-weight: 500;
+  font-size: 1.15rem; line-height: 1.2; color: var(--ink);
+  margin-bottom: 0.3rem;
+}
+.lead {
+  font-size: 0.95rem; color: var(--ink-soft); line-height: 1.55;
+  margin-bottom: 1rem; max-width: 52ch;
+}
+p { margin-bottom: 0.5rem; max-width: 60ch; font-size: 0.86rem; color: var(--ink-soft); line-height: 1.5; }
+.muted { color: var(--ink-muted); }
+.small { font-size: 0.78rem; }
+
+/* ===================================
+   SLIDE 0: TITLE
+   =================================== */
+.title-slide {
+  background:
+    linear-gradient(135deg, rgba(245,239,230,0.82) 0%, rgba(240,230,214,0.75) 40%, rgba(232,216,196,0.7) 100%),
+    url('alentejo-images/countryside.jpg') center/cover no-repeat;
+}
+.title-slide .slide-inner {
+  text-align: center; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.title-label {
+  font-family: var(--font-body); font-size: 0.65rem; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--terracotta);
+  margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.title-label::before, .title-label::after {
+  content: ''; display: block; width: 32px; height: 1px; background: var(--terracotta); opacity: 0.5;
+}
+.title-hero {
+  font-family: var(--font-display); font-weight: 300; font-style: italic;
+  font-size: clamp(4rem, 10vw, 7.5rem); line-height: 0.9;
+  letter-spacing: -0.04em; color: var(--ink);
+  margin-bottom: 1rem;
+}
+.title-sub {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: 1.3rem; color: var(--ink-soft); letter-spacing: 0.02em;
+  margin-bottom: 2rem;
+}
+.title-dates {
+  display: flex; gap: 2rem; font-size: 0.78rem; color: var(--ink-muted);
+}
+.title-dates span { display: flex; align-items: center; gap: 0.4rem; }
+.title-dates i { color: var(--terracotta); font-size: 0.9rem; }
+
+/* decorative sun */
+.sun-deco {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: radial-gradient(circle, var(--golden) 0%, rgba(212,168,83,0.15) 60%, transparent 70%);
+  margin-bottom: 1.5rem; opacity: 0.8;
+}
+
+/* ===================================
+   BACKGROUND IMAGE UTILITIES
+   =================================== */
+.bg-img {
+  position: absolute; inset: 0; z-index: 0;
+  background-size: cover; background-position: center;
+}
+.bg-img::after {
+  content: ''; position: absolute; inset: 0;
+}
+/* warm cream overlay for light slides */
+.bg-img.overlay-cream::after {
+  background: linear-gradient(135deg, rgba(250,247,242,0.88) 0%, rgba(245,239,230,0.82) 50%, rgba(250,247,242,0.78) 100%);
+}
+/* stronger cream for text-heavy slides */
+.bg-img.overlay-cream-strong::after {
+  background: rgba(250,247,242,0.90);
+}
+/* right-side reveal: left text protected, right image shows through */
+.bg-img.overlay-left::after {
+  background: linear-gradient(90deg, rgba(250,247,242,0.95) 0%, rgba(250,247,242,0.92) 45%, rgba(250,247,242,0.5) 70%, rgba(250,247,242,0.15) 100%);
+}
+/* left-side reveal */
+.bg-img.overlay-right::after {
+  background: linear-gradient(270deg, rgba(250,247,242,0.95) 0%, rgba(250,247,242,0.92) 45%, rgba(250,247,242,0.5) 70%, rgba(250,247,242,0.15) 100%);
+}
+/* bottom strip reveal */
+.bg-img.overlay-top::after {
+  background: linear-gradient(180deg, rgba(250,247,242,0.92) 0%, rgba(250,247,242,0.85) 55%, rgba(250,247,242,0.4) 80%, rgba(250,247,242,0.15) 100%);
+}
+/* dark overlay for night/moody images */
+.bg-img.overlay-dark::after {
+  background: linear-gradient(135deg, rgba(250,247,242,0.92) 0%, rgba(250,247,242,0.85) 50%, rgba(250,247,242,0.75) 100%);
+}
+
+/* ===================================
+   LAYOUT: TWO COLUMN
+   =================================== */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+.two-col.wide-left { grid-template-columns: 1.2fr 0.8fr; }
+.two-col.wide-right { grid-template-columns: 0.8fr 1.2fr; }
+
+/* ===================================
+   CARDS
+   =================================== */
+.cards { display: grid; gap: 0.6rem; margin: 0.8rem 0; }
+.cards.c2 { grid-template-columns: 1fr 1fr; }
+.cards.c3 { grid-template-columns: repeat(3, 1fr); }
+.cards.c4 { grid-template-columns: repeat(4, 1fr); }
+.card {
+  padding: 0.8rem 1rem; border: 1px solid var(--border);
+  border-radius: 12px; background: var(--white);
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: var(--stone-mid); }
+.card-icon { font-size: 1.3rem; margin-bottom: 4px; color: var(--terracotta); }
+.card-icon.olive { color: var(--olive); }
+.card-icon.golden { color: var(--golden); }
+.card h4 {
+  font-family: var(--font-display); font-size: 0.95rem; font-weight: 600;
+  line-height: 1.2; margin-bottom: 3px; color: var(--ink);
+}
+.card p { font-size: 0.76rem; color: var(--ink-muted); line-height: 1.4; margin-bottom: 0; }
+.card.accent {
+  border-color: var(--terracotta); background: var(--terracotta-light);
+}
+.card.olive-accent {
+  border-color: var(--olive); background: var(--olive-light);
+}
+
+/* ===================================
+   HOTEL FEATURE BLOCK
+   =================================== */
+.hotel-header {
+  display: flex; align-items: baseline; gap: 0.8rem;
+  margin-bottom: 0.2rem;
+}
+.hotel-tag {
+  font-family: var(--font-body); font-size: 0.58rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 20px;
+  background: var(--terracotta); color: var(--white);
+}
+.hotel-tag.olive { background: var(--olive); }
+
+.hotel-detail {
+  display: flex; gap: 1.2rem; margin: 0.6rem 0;
+  font-size: 0.75rem; color: var(--ink-muted); flex-wrap: wrap;
+}
+.hotel-detail span { display: flex; align-items: center; gap: 0.3rem; }
+.hotel-detail i { font-size: 0.85rem; color: var(--terracotta); }
+.hotel-detail.olive i { color: var(--olive); }
+
+/* ===================================
+   TIMELINE
+   =================================== */
+.timeline {
+  position: relative; padding-left: 2rem;
+  margin: 0.5rem 0;
+}
+.timeline::before {
+  content: ''; position: absolute; left: 6px; top: 4px; bottom: 4px;
+  width: 2px; background: linear-gradient(180deg, var(--terracotta), var(--olive), var(--golden));
+  border-radius: 1px;
+}
+.tl-item {
+  position: relative; padding: 0.4rem 0 0.8rem 0;
+}
+.tl-item::before {
+  content: ''; position: absolute; left: -2rem; top: 0.55rem;
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 2px solid var(--terracotta); background: var(--cream);
+}
+.tl-item:nth-child(2)::before { border-color: var(--terracotta); background: var(--terracotta); }
+.tl-item:nth-child(3)::before { border-color: var(--olive); background: var(--olive); }
+.tl-item:nth-child(4)::before { border-color: var(--olive); }
+.tl-item:nth-child(5)::before { border-color: var(--golden); background: var(--golden); }
+.tl-day {
+  font-family: var(--font-display); font-weight: 600; font-size: 0.95rem;
+  color: var(--ink); line-height: 1.2;
+}
+.tl-detail {
+  font-size: 0.78rem; color: var(--ink-muted); line-height: 1.4;
+  margin-top: 1px;
+}
+.tl-place {
+  font-family: var(--font-display); font-weight: 500; font-style: italic;
+  color: var(--ink-soft);
+}
+
+/* ===================================
+   PULL QUOTE
+   =================================== */
+.pq {
+  padding: 0.8rem 0 0.8rem 1.2rem;
+  border-left: 3px solid var(--terracotta);
+  margin: 0.8rem 0; max-width: 48ch;
+}
+.pq p {
+  font-family: var(--font-display); font-size: 1.05rem; font-weight: 400;
+  font-style: italic; line-height: 1.45; color: var(--ink); margin-bottom: 0;
+}
+.pq cite {
+  display: block; margin-top: 0.3rem;
+  font-family: var(--font-body); font-style: normal;
+  font-size: 0.7rem; color: var(--ink-muted); font-weight: 500;
+}
+
+/* ===================================
+   IMAGE PLACEHOLDER (beautiful CSS art)
+   =================================== */
+.vista {
+  border-radius: 12px; overflow: hidden;
+  position: relative; min-height: 140px;
+  background-size: cover; background-position: center;
+}
+.vista.barrocal {
+  background-image: url('alentejo-images/cottages-pool.jpg');
+}
+.vista.land {
+  background-image: url('alentejo-images/land-stargazing.webp');
+}
+.vista-label {
+  position: absolute; bottom: 0.8rem; left: 0.8rem;
+  font-family: var(--font-body); font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,0.8);
+  background: rgba(0,0,0,0.25); backdrop-filter: blur(8px);
+  padding: 3px 10px; border-radius: 20px;
+}
+
+/* ===================================
+   PACKING LIST
+   =================================== */
+.pack-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.pack-cat h4 {
+  font-family: var(--font-display); font-weight: 600; font-size: 1rem;
+  color: var(--ink); margin-bottom: 0.4rem;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.pack-cat h4 i { color: var(--terracotta); font-size: 1rem; }
+.pack-list {
+  list-style: none; font-size: 0.8rem; color: var(--ink-soft);
+}
+.pack-list li {
+  padding: 0.2rem 0; display: flex; align-items: baseline; gap: 0.5rem;
+}
+.pack-list li::before {
+  content: ''; display: block; width: 5px; height: 5px; flex-shrink: 0;
+  border-radius: 50%; border: 1.5px solid var(--terracotta);
+  margin-top: 3px;
+}
+.pack-list li.checked::before {
+  background: var(--olive); border-color: var(--olive);
+}
+
+/* ===================================
+   ROUTE MAP (simplified)
+   =================================== */
+.route-visual {
+  display: flex; align-items: center; gap: 0; margin: 1rem 0;
+  font-size: 0.72rem; flex-wrap: nowrap;
+}
+.route-node {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0.2rem; flex-shrink: 0;
+}
+.route-node .dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem; color: var(--white);
+}
+.route-node .dot.terra { background: var(--terracotta); }
+.route-node .dot.olv { background: var(--olive); }
+.route-node .dot.gld { background: var(--golden); }
+.route-node .dot.ink { background: var(--ink); }
+.route-node span { font-weight: 600; color: var(--ink); font-size: 0.68rem; white-space: nowrap; }
+.route-line {
+  flex: 1; height: 2px; min-width: 20px;
+  background: var(--stone-mid); position: relative;
+}
+.route-line .dur {
+  position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
+  font-size: 0.6rem; color: var(--ink-muted); white-space: nowrap;
+  font-weight: 500;
+}
+
+/* ===================================
+   DIVIDER
+   =================================== */
+.divider {
+  height: 1px; background: var(--border); margin: 0.8rem 0;
+}
+.divider.short { max-width: 60px; background: var(--terracotta); height: 2px; border-radius: 1px; }
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+@media (max-width: 768px) {
+  .two-col, .two-col.wide-left, .two-col.wide-right { grid-template-columns: 1fr; }
+  .cards.c3, .cards.c4 { grid-template-columns: 1fr 1fr; }
+  .pack-grid { grid-template-columns: 1fr; }
+  .slide-inner { padding: 0 1rem; }
+  .bar-label, .bar-keys { display: none; }
+  .route-visual { flex-wrap: wrap; justify-content: center; }
+}
+
+/* ===================================
+   PRINT (PDF)
+   =================================== */
+@page { size: 13.333in 7.5in; margin: 0; }
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+  body { overflow: visible !important; height: auto !important; display: block !important; }
+  .carousel { overflow: visible !important; position: static !important; flex: none !important; }
+  .carousel-track { display: block !important; transform: none !important; transition: none !important; height: auto !important; }
+  .slide {
+    width: 13.333in !important; height: 7.5in !important;
+    page-break-after: always !important; break-after: page !important;
+    page-break-inside: avoid !important; break-inside: avoid !important;
+    flex: none !important; display: flex !important; overflow: hidden !important;
+  }
+  .slide:last-child { page-break-after: auto !important; break-after: auto !important; }
+  .slide-inner { max-width: 1100px !important; padding: 0 3rem !important; }
+  .bottom-bar { display: none !important; }
+  .bg-img { position: absolute !important; inset: 0 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .bg-img::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .two-col, .two-col.wide-left, .two-col.wide-right { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 2rem !important; }
+  .cards.c2 { grid-template-columns: 1fr 1fr !important; }
+  .cards.c3 { grid-template-columns: repeat(3, 1fr) !important; }
+  .cards.c4 { grid-template-columns: repeat(4, 1fr) !important; }
+  .pack-grid { grid-template-columns: 1fr 1fr !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="carousel">
+<div class="carousel-track" id="carousel-track">
+
+<!-- =====================================================================
+     SLIDE 0: TITLE
+     ===================================================================== -->
+<div class="slide title-slide"><div class="slide-inner">
+  <div class="sun-deco"></div>
+  <div class="title-label">An Easter weekend</div>
+  <h1 class="title-hero">Alentejo</h1>
+  <p class="title-sub">Two estates, one beautiful corner of Portugal</p>
+  <div class="title-dates">
+    <span><i class="ti ti-calendar"></i> Friday 3 - Monday 6 April 2026</span>
+    <span><i class="ti ti-plane"></i> London to Lisbon</span>
+    <span><i class="ti ti-heart"></i> Thomas + Masha</span>
+  </div>
+</div></div>
+
+<!-- =====================================================================
+     SLIDE 1: THE PLAN
+     ===================================================================== -->
+<div class="slide"><div class="bg-img overlay-left" style="background-image: url('alentejo-images/olive-tree.jpg');"></div><div class="slide-inner">
+  <div class="sn">The Plan</div>
+  <h2 class="section">Four days, two hotels,<br>zero rush</h2>
+  <div class="two-col wide-right" style="margin-top: 0.6rem;">
+    <div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-day">Friday 3 April</div>
+          <div class="tl-detail">12:00 LHR <i class="ti ti-arrow-right" style="font-size:0.65rem"></i> LIS. Pick up car, drive to <span class="tl-place">Barrocal</span></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-day">Saturday 4 April</div>
+          <div class="tl-detail">Full day at <span class="tl-place">S&atilde;o Louren&ccedil;o do Barrocal</span>. Horses, lake, vineyards.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-day">Sunday 5 April</div>
+          <div class="tl-detail">Easter morning at Barrocal. Afternoon drive to <span class="tl-place">L'AND Vineyards</span></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-day">Monday 6 April</div>
+          <div class="tl-detail">Morning at <span class="tl-place">L'AND</span>. Drive to Lisbon for 17:00 LIS <i class="ti ti-arrow-right" style="font-size:0.65rem"></i> LHR</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="route-visual">
+        <div class="route-node"><div class="dot ink"><i class="ti ti-plane-departure"></i></div><span>London</span></div>
+        <div class="route-line"><span class="dur">3h flight</span></div>
+        <div class="route-node"><div class="dot terra"><i class="ti ti-plane-arrival"></i></div><span>Lisbon</span></div>
+        <div class="route-line"><span class="dur">~1h45</span></div>
+        <div class="route-node"><div class="dot terra"><i class="ti ti-horse"></i></div><span>Barrocal</span></div>
+        <div class="route-line"><span class="dur">~45min</span></div>
+        <div class="route-node"><div class="dot olv"><i class="ti ti-grape"></i></div><span>L'AND</span></div>
+        <div class="route-line"><span class="dur">~1h</span></div>
+        <div class="route-node"><div class="dot ink"><i class="ti ti-plane-departure"></i></div><span>Lisbon</span></div>
+      </div>
+      <div style="margin-top: 1.5rem;">
+        <div class="card accent" style="margin-bottom: 0.6rem;">
+          <div class="card-icon"><i class="ti ti-route"></i></div>
+          <h4>The clever bit</h4>
+          <p>L'AND Vineyards is right on the way back to Lisbon. Instead of rushing back on Sunday, we stay one more night and drive to the airport from there on Monday morning.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- =====================================================================
+     SLIDE 2: SAO LOURENCO DO BARROCAL
+     ===================================================================== -->
+<div class="slide"><div class="bg-img overlay-left" style="background-image: url('alentejo-images/estate-wide.jpg'); background-position: center 40%;"></div><div class="slide-inner">
+  <div class="sn">Friday evening - Sunday morning</div>
+  <h2 class="section">S&atilde;o Louren&ccedil;o<br>do Barrocal</h2>
+  <div class="two-col" style="margin-top: 0.4rem;">
+    <div>
+      <div class="hotel-detail">
+        <span><i class="ti ti-map-pin"></i> Monsaraz, Alentejo</span>
+        <span><i class="ti ti-ruler-2"></i> 780-hectare estate</span>
+      </div>
+      <p class="lead">A 200-year-old farming village, restored into one of Portugal's most celebrated hotels. Whitewashed stone, ancient olive groves, Lusitano horses grazing in the fields.</p>
+      <p>Designed by Pritzker Prize winner Eduardo Souto de Moura, every building was converted from its original purpose: an olive press became a bar, a cowshed became the restaurant, agricultural outbuildings became guest rooms. The interiors are simple: local ceramics, woven tapestries, farm-wood furniture.</p>
+      <div class="pq" style="margin-top: 0.8rem;">
+        <p>What's fascinating is the change in usage. An olive press can become a living room with a bar, a cowshed can be made into a restaurant.</p>
+        <cite>Eduardo Souto de Moura, Architect</cite>
+      </div>
+    </div>
+    <div>
+      <div class="vista barrocal" style="height: 200px; margin-bottom: 0.8rem;">
+        <span class="vista-label">Overlooking Monsaraz &amp; the Alqueva</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; margin-bottom: 0.8rem;">
+        <img src="alentejo-images/cottage-terrace.jpg" alt="Barrocal terrace" style="width:100%; height:80px; object-fit:cover; border-radius:8px;">
+        <img src="alentejo-images/horse-detail.jpg" alt="Lusitano horse" style="width:100%; height:80px; object-fit:cover; border-radius:8px;">
+      </div>
+      <div class="cards c2">
+        <div class="card">
+          <div class="card-icon"><i class="ti ti-plant-2"></i></div>
+          <h4>Farm Village</h4>
+          <p>22 guest rooms, 16 cottages, spa, winery, on-site restaurant</p>
+        </div>
+        <div class="card">
+          <div class="card-icon olive"><i class="ti ti-tree"></i></div>
+          <h4>The Estate</h4>
+          <p>Vineyards, olive groves, ancient oaks, Neolithic menhir</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- =====================================================================
+     SLIDE 3: BARROCAL THINGS TO DO
+     ===================================================================== -->
+<div class="slide"><div class="bg-img overlay-cream" style="background-image: url('alentejo-images/horse-monsaraz.jpg'); background-position: center 30%;"></div><div class="slide-inner">
+  <div class="sn">At the Barrocal</div>
+  <h2 class="section">Ride, swim, taste</h2>
+  <p class="lead">780 hectares of estate to explore, and a lake just down the road.</p>
+  <div class="cards c3" style="margin-top: 0.6rem;">
+    <div class="card accent">
+      <div class="card-icon"><i class="ti ti-horse"></i></div>
+      <h4>Horse riding</h4>
+      <p>Ride Lusitano horses across the entire estate: through vineyards, past ancient olive trees and a Neolithic menhir, to views of Monsaraz castle. Wine tasting on horseback or by carriage too.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="color: #5a8aaa;"><i class="ti ti-ripple"></i></div>
+      <h4>Lake Alqueva</h4>
+      <p>Europe's largest artificial lake is right on the doorstep. The trail from the estate leads through open plains and ancient olive trees to the water's edge. Breathtaking light and reflections.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon golden"><i class="ti ti-glass-full"></i></div>
+      <h4>Wine tasting</h4>
+      <p>The estate has its own vineyards and cellar. Exclusive tastings after wandering through the vines. They also have a wine-on-horseback experience.</p>
+    </div>
+  </div>
+  <div class="cards c3" style="margin-top: 0;">
+    <div class="card">
+      <div class="card-icon olive"><i class="ti ti-basket"></i></div>
+      <h4>Picnics</h4>
+      <p>Take a hamper filled with local Alentejo products and find a spot on the estate with sweeping views.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="ti ti-massage"></i></div>
+      <h4>Spa</h4>
+      <p>On-site spa set within the restored farm buildings. Simple, earthy treatments.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="color: var(--ink-soft);"><i class="ti ti-building-castle"></i></div>
+      <h4>Monsaraz</h4>
+      <p>The medieval hilltop village is just nearby. Cobblestone streets, castle walls, panoramic views across the Alentejo.</p>
+    </div>
+  </div>
+</div></div>
+
+<!-- =====================================================================
+     SLIDE 4: L'AND VINEYARDS
+     ===================================================================== -->
+<div class="slide"><div class="bg-img overlay-left" style="background-image: url('alentejo-images/land-aerial.webp'); background-position: center 60%;"></div><div class="slide-inner">
+  <div class="sn">Sunday evening - Monday morning</div>
+  <h2 class="section">L'AND<br>Vineyards</h2>
+  <div class="two-col" style="margin-top: 0.4rem;">
+    <div>
+      <div class="hotel-detail olive">
+        <span><i class="ti ti-map-pin"></i> Montemor-o-Novo</span>
+        <span><i class="ti ti-award"></i> Relais &amp; Ch&acirc;teaux</span>
+      </div>
+      <p class="lead">A sleek wine retreat where contemporary architecture dissolves into the Alentejo landscape. Only 35 suites and 9 pool villas. The ceilings open so you can sleep under the stars.</p>
+      <p>Designed by Promontorio and Marcio Kogan of Studio MK27 (the Fasano architect). The interiors are deliberately simple: black slate floors, oak wainscots, Tom Dixon lights, George Nakashima furniture. An exclusive art collection by Michael Biberstein, inspired by representations of the sky, hangs throughout.</p>
+      <div class="pq" style="margin-top: 0.8rem; border-left-color: var(--olive);">
+        <p>Architecture, art, landscape, nature, local crafts, sound and scent creating an atmosphere of tranquility, where guests can feel at home.</p>
+        <cite>L'AND Vineyards</cite>
+      </div>
+    </div>
+    <div>
+      <div class="vista land" style="height: 200px; margin-bottom: 0.8rem;">
+        <span class="vista-label">Sleep beneath the Alentejo sky</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; margin-bottom: 0.8rem;">
+        <img src="alentejo-images/land-spa.webp" alt="L'AND Spa" style="width:100%; height:80px; object-fit:cover; border-radius:8px;">
+        <img src="alentejo-images/land-mapa.webp" alt="MAPA Restaurant" style="width:100%; height:80px; object-fit:cover; border-radius:8px;">
+      </div>
+      <div class="cards c2">
+        <div class="card olive-accent">
+          <div class="card-icon olive"><i class="ti ti-stars"></i></div>
+          <h4>Sky Suites</h4>
+          <p>Retractable bedroom ceiling. Fall asleep watching the stars.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon golden"><i class="ti ti-trophy"></i></div>
+          <h4>MAPA</h4>
+          <p>Michelin-starred restaurant. Portuguese voyages meets Alentejo terroir.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- =====================================================================
+     SLIDE 5: L'AND EXPERIENCES
+     ===================================================================== -->
+<div class="slide"><div class="bg-img overlay-cream" style="background-image: url('alentejo-images/land-wine.webp'); background-position: center;"></div><div class="slide-inner">
+  <div class="sn">At L'AND</div>
+  <h2 class="section">Wine, stars, slow</h2>
+  <p class="lead">One night, but a world to soak in. The estate sits in a south-facing valley of vineyards overlooking the medieval Montemor castle.</p>
+  <div class="cards c4" style="margin-top: 0.6rem;">
+    <div class="card olive-accent">
+      <div class="card-icon olive"><i class="ti ti-grape"></i></div>
+      <h4>Wine culture</h4>
+      <p>Six hectares of organic vineyards. Touriga Nacional, Alicante Bouschet, Syrah. Wine club tastings and cellar visits. You can even make your own wine.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="color: #6a5a8a;"><i class="ti ti-moon-stars"></i></div>
+      <h4>Stargazing</h4>
+      <p>The Sky Suites have retractable roofs. No light pollution. Just you, the bed, and the entire Alentejo night sky overhead.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="ti ti-droplet-heart"></i></div>
+      <h4>Vinotherapy Spa</h4>
+      <p>By Austrian brand Vinoble. Grape seed and vine-based treatments. Indoor heated pool, sauna, hammam. Plus an outdoor pool in the vineyards.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon golden"><i class="ti ti-chef-hat"></i></div>
+      <h4>MAPA restaurant</h4>
+      <p>Chef David Jesus. Michelin-starred. Portuguese cuisine inspired by maritime voyages. Ingredients from the estate's organic gardens and Setubal's seaport.</p>
+    </div>
+  </div>
+  <div style="margin-top: 0.8rem;">
+    <div class="card" style="max-width: 520px; border-color: var(--golden); background: var(--golden-light);">
+      <div style="display:flex; align-items: center; gap: 0.6rem;">
+        <i class="ti ti-clock" style="font-size: 1.1rem; color: var(--golden);"></i>
+        <div>
+          <h4 style="font-family: var(--font-display); font-size: 0.88rem; font-weight: 600; margin-bottom: 1px;">Only ~1 hour to the airport</h4>
+          <p style="font-size: 0.76rem; color: var(--ink-muted); margin: 0;">L'AND is just outside Montemor-o-Novo. A straight, easy morning drive to Lisbon airport for our 5PM flight.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- =====================================================================
+     SLIDE 6: LOGISTICS
+     ===================================================================== -->
+<div class="slide"><div class="bg-img overlay-cream-strong" style="background-image: url('alentejo-images/monte-street.jpg'); background-position: center;"></div><div class="slide-inner">
+  <div class="sn">Getting there</div>
+  <h2 class="section">Flights &amp; driving</h2>
+  <div class="two-col" style="margin-top: 0.6rem;">
+    <div>
+      <h3 class="sub"><i class="ti ti-plane" style="color: var(--terracotta); margin-right: 0.3rem;"></i> Flights</h3>
+      <div class="divider short"></div>
+      <div class="cards c1" style="grid-template-columns: 1fr; margin-top: 0.5rem;">
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <h4>Outbound: Friday 3 April</h4>
+            <span style="font-size: 0.68rem; color: var(--terracotta); font-weight: 600;">12:00</span>
+          </div>
+          <p>London Heathrow <i class="ti ti-arrow-right" style="font-size:0.65rem"></i> Lisbon</p>
+          <p style="color: var(--ink-muted); font-size: 0.72rem;">~3h flight. Land mid-afternoon local time.</p>
+        </div>
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <h4>Return: Monday 6 April</h4>
+            <span style="font-size: 0.68rem; color: var(--olive); font-weight: 600;">17:00</span>
+          </div>
+          <p>Lisbon <i class="ti ti-arrow-right" style="font-size:0.65rem"></i> London Heathrow</p>
+          <p style="color: var(--ink-muted); font-size: 0.72rem;">~3h flight. Evening arrival in London.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3 class="sub"><i class="ti ti-car" style="color: var(--olive); margin-right: 0.3rem;"></i> Driving</h3>
+      <div class="divider short" style="background: var(--olive);"></div>
+      <p style="margin-top: 0.5rem;">Hire car from Lisbon airport. All drives are through beautiful, quiet Alentejo countryside.</p>
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 0.5rem;">
+        <tr style="border-bottom: 1px solid var(--border);">
+          <td style="padding: 0.4rem 0; font-weight: 600; color: var(--ink);">Lisbon <i class="ti ti-arrow-right" style="font-size:0.6rem"></i> Barrocal</td>
+          <td style="padding: 0.4rem 0; text-align: right; color: var(--ink-muted);">~1h 45min</td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--border);">
+          <td style="padding: 0.4rem 0; font-weight: 600; color: var(--ink);">Barrocal <i class="ti ti-arrow-right" style="font-size:0.6rem"></i> L'AND</td>
+          <td style="padding: 0.4rem 0; text-align: right; color: var(--ink-muted);">~45min</td>
+        </tr>
+        <tr>
+          <td style="padding: 0.4rem 0; font-weight: 600; color: var(--ink);">L'AND <i class="ti ti-arrow-right" style="font-size:0.6rem"></i> Lisbon airport</td>
+          <td style="padding: 0.4rem 0; text-align: right; color: var(--ink-muted);">~1h</td>
+        </tr>
+      </table>
+      <div class="card" style="margin-top: 0.8rem; border-color: var(--olive); background: var(--olive-light);">
+        <p style="font-size: 0.78rem; color: var(--ink-soft); margin: 0;"><i class="ti ti-info-circle" style="color: var(--olive);"></i> All routes are easy motorway + countryside roads. No mountain passes. The drive itself is part of the experience: golden plains, cork oaks, hilltop villages.</p>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- =====================================================================
+     SLIDE 7: PACKING
+     ===================================================================== -->
+<div class="slide"><div class="bg-img overlay-cream-strong" style="background-image: url('alentejo-images/pool.jpg'); background-position: center 70%;"></div><div class="slide-inner">
+  <div class="sn">Before we go</div>
+  <h2 class="section">What to pack</h2>
+  <p class="lead">Four days, warm Alentejo spring weather, two beautiful hotels. Pack light, pack right.</p>
+  <div class="pack-grid" style="margin-top: 0.6rem;">
+    <div class="pack-cat">
+      <h4><i class="ti ti-horse"></i> For the countryside</h4>
+      <ul class="pack-list">
+        <li>Comfortable closed-toe shoes (for riding + estate walks)</li>
+        <li>Long trousers for horseback (jeans or similar)</li>
+        <li>Light layers: warm days, cooler evenings</li>
+        <li>Sun hat</li>
+        <li>Sunscreen + sunglasses</li>
+      </ul>
+    </div>
+    <div class="pack-cat">
+      <h4><i class="ti ti-shirt"></i> For the evenings</h4>
+      <ul class="pack-list">
+        <li>Something nice for MAPA (Michelin dinner at L'AND)</li>
+        <li>Light jacket or wrap for restaurant terraces</li>
+        <li>Comfortable dinner outfit for Barrocal (smart-casual)</li>
+      </ul>
+    </div>
+    <div class="pack-cat">
+      <h4><i class="ti ti-pool"></i> For relaxing</h4>
+      <ul class="pack-list">
+        <li>Swimwear (both hotels have pools + spa)</li>
+        <li>Sandals or pool slides</li>
+        <li>A good book</li>
+      </ul>
+    </div>
+    <div class="pack-cat">
+      <h4><i class="ti ti-briefcase"></i> Essentials</h4>
+      <ul class="pack-list">
+        <li>Passport</li>
+        <li>Driving licence (for the hire car)</li>
+        <li>Phone charger + camera</li>
+        <li>A light bag (we're moving between two hotels)</li>
+      </ul>
+    </div>
+  </div>
+</div></div>
+
+</div><!-- /carousel-track -->
+</div><!-- /carousel -->
+
+<!-- BOTTOM NAV BAR -->
+<div class="bottom-bar">
+  <div class="bar-nav"><button class="bar-btn" id="prev-btn" aria-label="Previous">&#8592;</button><button class="bar-btn" id="next-btn" aria-label="Next">&#8594;</button></div>
+  <div class="bar-dots" id="bar-dots"></div>
+  <div class="bar-keys"><kbd>&#8592;</kbd> <kbd>&#8594;</kbd></div>
+  <div class="bar-label" id="bar-label"></div>
+</div>
+
+<script>
+const slideNames = [
+  'Alentejo',
+  'The Plan',
+  'S\u00e3o Louren\u00e7o do Barrocal',
+  'Ride, Swim, Taste',
+  'L\u2019AND Vineyards',
+  'Wine, Stars, Slow',
+  'Flights & Driving',
+  'What to Pack'
+];
+
+const track = document.getElementById('carousel-track');
+const slides = track.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let currentSlide = 0;
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const dotsC = document.getElementById('bar-dots');
+const labelEl = document.getElementById('bar-label');
+
+slideNames.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'bar-dot';
+  d.onclick = () => goTo(i);
+  dotsC.appendChild(d);
+});
+
+function goTo(idx) {
+  if (idx < 0 || idx >= totalSlides) return;
+  currentSlide = idx;
+  track.style.transform = `translateX(-${idx * 100}%)`;
+  dotsC.querySelectorAll('.bar-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+  labelEl.innerHTML = `<strong>${slideNames[idx]}</strong>`;
+  prevBtn.disabled = idx === 0;
+  nextBtn.disabled = idx === totalSlides - 1;
+}
+
+prevBtn.onclick = () => goTo(currentSlide - 1);
+nextBtn.onclick = () => goTo(currentSlide + 1);
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowRight') { e.preventDefault(); goTo(currentSlide + 1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(currentSlide - 1); }
+});
+
+let touchX = 0;
+const carousel = document.querySelector('.carousel');
+carousel.addEventListener('touchstart', e => { touchX = e.changedTouches[0].screenX; }, { passive: true });
+carousel.addEventListener('touchend', e => {
+  const diff = touchX - e.changedTouches[0].screenX;
+  if (Math.abs(diff) > 60) { diff > 0 ? goTo(currentSlide + 1) : goTo(currentSlide - 1); }
+}, { passive: true });
+
+goTo(0);
+</script>
+</body>
+</html>
