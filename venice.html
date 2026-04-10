@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Venice, Spring 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  /* Venice palette */
+  --pearl: #f2f1ed;
+  --pearl-warm: #ebe7e0;
+  --stone: #d6cfc4;
+  --stone-mid: #c0b6a6;
+  --lagoon: #3a7d8c;
+  --lagoon-light: #e4eff2;
+  --lagoon-deep: #2a6070;
+  --blush: #b8706a;
+  --blush-light: #f4ebe9;
+  --blush-deep: #9a5650;
+  --gold: #b89a3a;
+  --gold-light: #f7f1df;
+  --ink: #1c2230;
+  --ink-soft: #34404e;
+  --ink-muted: #7a8494;
+  --ink-faint: #a8b0bc;
+  --white: #ffffff;
+  --border: #d8d2c8;
+
+  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+html { font-size: 16px; }
+body {
+  font-family: var(--font-body);
+  background: var(--pearl);
+  color: var(--ink);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- CAROUSEL --- */
+.carousel { flex: 1; overflow: hidden; position: relative; }
+.carousel-track { display: flex; height: 100%; transition: transform 0.6s cubic-bezier(0.16,1,0.3,1); will-change: transform; }
+.slide { flex: 0 0 100%; height: 100%; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; }
+.slide-inner { width: 100%; max-width: 960px; padding: 0 2.5rem; position: relative; z-index: 2; }
+
+/* --- BOTTOM BAR --- */
+.bottom-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.5rem 1.5rem; border-top: 1px solid var(--border);
+  background: var(--white); flex-shrink: 0; gap: 1rem; user-select: none;
+}
+.bar-nav { display: flex; align-items: center; gap: 6px; }
+.bar-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--stone-mid); background: var(--white);
+  color: var(--ink-soft); font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.15s; flex-shrink: 0;
+}
+.bar-btn:hover:not(:disabled) { background: var(--lagoon); border-color: var(--lagoon); color: white; }
+.bar-btn:disabled { opacity: 0.3; cursor: default; }
+.bar-dots { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; justify-content: center; }
+.bar-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--stone-mid); cursor: pointer; transition: all 0.2s; flex-shrink: 0;
+}
+.bar-dot:hover { background: var(--ink-muted); }
+.bar-dot.active { background: var(--lagoon); width: 22px; border-radius: 4px; }
+.bar-label { font-size: 0.72rem; color: var(--ink-muted); white-space: nowrap; text-align: right; flex-shrink: 0; }
+.bar-label strong { color: var(--ink-soft); font-weight: 600; }
+.bar-keys { font-size: 0.62rem; color: var(--ink-muted); flex-shrink: 0; }
+.bar-keys kbd {
+  display: inline-block; padding: 1px 4px;
+  border: 1px solid var(--stone-mid); border-radius: 3px;
+  font-family: var(--font-body); font-size: 0.6rem; background: var(--pearl);
+}
+
+/* ===================================
+   TYPOGRAPHY
+   =================================== */
+.serif { font-family: var(--font-display); }
+.sn {
+  font-family: var(--font-body); font-size: 0.68rem; font-weight: 600;
+  color: var(--lagoon); letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+h1.hero {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: clamp(3.5rem, 8vw, 6rem); line-height: 0.95;
+  letter-spacing: -0.03em; color: var(--ink);
+}
+h1.hero em { font-style: italic; font-weight: 300; }
+h2.section {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem); line-height: 1.1;
+  letter-spacing: -0.02em; color: var(--ink); margin-bottom: 0.6rem;
+}
+h3.sub {
+  font-family: var(--font-display); font-weight: 500;
+  font-size: 1.15rem; line-height: 1.2; color: var(--ink);
+  margin-bottom: 0.3rem;
+}
+.lead {
+  font-size: 0.95rem; color: var(--ink-soft); line-height: 1.55;
+  margin-bottom: 1rem; max-width: 52ch;
+}
+p { margin-bottom: 0.5rem; max-width: 60ch; font-size: 0.86rem; color: var(--ink-soft); line-height: 1.5; }
+.muted { color: var(--ink-muted); }
+.small { font-size: 0.78rem; }
+
+/* ===================================
+   SLIDE 0: TITLE
+   =================================== */
+.title-slide {
+  background:
+    linear-gradient(135deg, rgba(242,241,237,0.82) 0%, rgba(235,231,224,0.75) 40%, rgba(228,239,242,0.7) 100%),
+    url('venice-images/canal.jpg') center/cover no-repeat;
+}
+.title-slide .slide-inner {
+  text-align: center; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.title-label {
+  font-family: var(--font-body); font-size: 0.65rem; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--lagoon);
+  margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.title-label::before, .title-label::after {
+  content: ''; display: block; width: 32px; height: 1px; background: var(--lagoon); opacity: 0.5;
+}
+.title-hero {
+  font-family: var(--font-display); font-weight: 300; font-style: italic;
+  font-size: clamp(4rem, 10vw, 7.5rem); line-height: 0.9;
+  letter-spacing: -0.04em; color: var(--ink);
+  margin-bottom: 1rem;
+}
+.title-sub {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: 1.3rem; color: var(--ink-soft); letter-spacing: 0.02em;
+  margin-bottom: 2rem;
+}
+.title-dates {
+  display: flex; gap: 2rem; font-size: 0.78rem; color: var(--ink-muted);
+}
+.title-dates span { display: flex; align-items: center; gap: 0.4rem; }
+.title-dates i { color: var(--lagoon); font-size: 0.9rem; }
+
+/* lagoon decorative element */
+.lagoon-deco {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: radial-gradient(circle, var(--lagoon) 0%, rgba(58,125,140,0.15) 55%, transparent 70%);
+  margin-bottom: 1.5rem; opacity: 0.7;
+}
+
+/* ===================================
+   BACKGROUND IMAGE UTILITIES
+   =================================== */
+.bg-img {
+  position: absolute; inset: 0; z-index: 0;
+  background-size: cover; background-position: center;
+}
+.bg-img::after {
+  content: ''; position: absolute; inset: 0;
+}
+.bg-img.overlay-pearl::after {
+  background: linear-gradient(135deg, rgba(242,241,237,0.88) 0%, rgba(235,231,224,0.82) 50%, rgba(242,241,237,0.78) 100%);
+}
+.bg-img.overlay-pearl-strong::after {
+  background: rgba(242,241,237,0.90);
+}
+.bg-img.overlay-left::after {
+  background: linear-gradient(90deg, rgba(242,241,237,0.95) 0%, rgba(242,241,237,0.92) 45%, rgba(242,241,237,0.5) 70%, rgba(242,241,237,0.15) 100%);
+}
+.bg-img.overlay-right::after {
+  background: linear-gradient(270deg, rgba(242,241,237,0.95) 0%, rgba(242,241,237,0.92) 45%, rgba(242,241,237,0.5) 70%, rgba(242,241,237,0.15) 100%);
+}
+.bg-img.overlay-top::after {
+  background: linear-gradient(180deg, rgba(242,241,237,0.92) 0%, rgba(242,241,237,0.85) 55%, rgba(242,241,237,0.4) 80%, rgba(242,241,237,0.15) 100%);
+}
+
+/* ===================================
+   LAYOUT: TWO COLUMN
+   =================================== */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+.two-col.wide-left { grid-template-columns: 1.2fr 0.8fr; }
+.two-col.wide-right { grid-template-columns: 0.8fr 1.2fr; }
+
+/* ===================================
+   CARDS
+   =================================== */
+.cards { display: grid; gap: 0.6rem; margin: 0.8rem 0; }
+.cards.c2 { grid-template-columns: 1fr 1fr; }
+.cards.c3 { grid-template-columns: repeat(3, 1fr); }
+.cards.c4 { grid-template-columns: repeat(4, 1fr); }
+.card {
+  padding: 0.8rem 1rem; border: 1px solid var(--border);
+  border-radius: 12px; background: var(--white);
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: var(--stone-mid); }
+.card-icon { font-size: 1.3rem; margin-bottom: 4px; color: var(--lagoon); }
+.card-icon.blush { color: var(--blush); }
+.card-icon.gold { color: var(--gold); }
+.card h4 {
+  font-family: var(--font-display); font-size: 0.95rem; font-weight: 600;
+  line-height: 1.2; margin-bottom: 3px; color: var(--ink);
+}
+.card p { font-size: 0.76rem; color: var(--ink-muted); line-height: 1.4; margin-bottom: 0; }
+.card.accent {
+  border-color: var(--lagoon); background: var(--lagoon-light);
+}
+.card.blush-accent {
+  border-color: var(--blush); background: var(--blush-light);
+}
+.card.gold-accent {
+  border-color: var(--gold); background: var(--gold-light);
+}
+
+/* ===================================
+   HOTEL DETAIL
+   =================================== */
+.hotel-detail {
+  display: flex; gap: 1.2rem; margin: 0.6rem 0;
+  font-size: 0.75rem; color: var(--ink-muted); flex-wrap: wrap;
+}
+.hotel-detail span { display: flex; align-items: center; gap: 0.3rem; }
+.hotel-detail i { font-size: 0.85rem; color: var(--lagoon); }
+
+.hotel-tag {
+  font-family: var(--font-body); font-size: 0.58rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 20px;
+  background: var(--lagoon); color: var(--white);
+}
+.hotel-tag.blush { background: var(--blush); }
+
+/* ===================================
+   TIMELINE
+   =================================== */
+.timeline {
+  position: relative; padding-left: 2rem;
+  margin: 0.5rem 0;
+}
+.timeline::before {
+  content: ''; position: absolute; left: 6px; top: 4px; bottom: 4px;
+  width: 2px; background: linear-gradient(180deg, var(--lagoon), var(--blush), var(--gold));
+  border-radius: 1px;
+}
+.tl-item {
+  position: relative; padding: 0.4rem 0 0.8rem 0;
+}
+.tl-item::before {
+  content: ''; position: absolute; left: -2rem; top: 0.55rem;
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 2px solid var(--lagoon); background: var(--pearl);
+}
+.tl-item:nth-child(2)::before { border-color: var(--lagoon); background: var(--lagoon); }
+.tl-item:nth-child(3)::before { border-color: var(--blush); background: var(--blush); }
+.tl-item:nth-child(4)::before { border-color: var(--blush); }
+.tl-item:nth-child(5)::before { border-color: var(--gold); background: var(--gold); }
+.tl-day {
+  font-family: var(--font-display); font-weight: 600; font-size: 0.95rem;
+  color: var(--ink); line-height: 1.2;
+}
+.tl-detail {
+  font-size: 0.78rem; color: var(--ink-muted); line-height: 1.4;
+  margin-top: 1px;
+}
+.tl-place {
+  font-family: var(--font-display); font-weight: 500; font-style: italic;
+  color: var(--ink-soft);
+}
+
+/* ===================================
+   PULL QUOTE
+   =================================== */
+.pq {
+  padding: 0.8rem 0 0.8rem 1.2rem;
+  border-left: 3px solid var(--lagoon);
+  margin: 0.8rem 0; max-width: 48ch;
+}
+.pq p {
+  font-family: var(--font-display); font-size: 1.05rem; font-weight: 400;
+  font-style: italic; line-height: 1.45; color: var(--ink); margin-bottom: 0;
+}
+.pq cite {
+  display: block; margin-top: 0.3rem;
+  font-family: var(--font-body); font-style: normal;
+  font-size: 0.7rem; color: var(--ink-muted); font-weight: 500;
+}
+
+/* ===================================
+   IMAGE PLACEHOLDER
+   =================================== */
+.vista {
+  border-radius: 12px; overflow: hidden;
+  position: relative; min-height: 140px;
+  background-size: cover; background-position: center;
+}
+.vista.san-giorgio {
+  background-image: url('venice-images/san-giorgio.jpg');
+}
+.vista.lagoon {
+  background-image: url('venice-images/lagoon.jpg');
+}
+.vista-label {
+  position: absolute; bottom: 0.8rem; left: 0.8rem;
+  font-family: var(--font-body); font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,0.8);
+  background: rgba(0,0,0,0.25); backdrop-filter: blur(8px);
+  padding: 3px 10px; border-radius: 20px;
+}
+
+/* ===================================
+   ROUTE MAP
+   =================================== */
+.route-visual {
+  display: flex; align-items: center; gap: 0; margin: 1rem 0;
+  font-size: 0.72rem; flex-wrap: nowrap;
+}
+.route-node {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0.2rem; flex-shrink: 0;
+}
+.route-node .dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem; color: var(--white);
+}
+.route-node .dot.lagn { background: var(--lagoon); }
+.route-node .dot.blsh { background: var(--blush); }
+.route-node .dot.gld { background: var(--gold); }
+.route-node .dot.ink { background: var(--ink); }
+.route-node span { font-weight: 600; color: var(--ink); font-size: 0.68rem; white-space: nowrap; }
+.route-line {
+  flex: 1; height: 2px; min-width: 20px;
+  background: var(--stone-mid); position: relative;
+}
+.route-line .dur {
+  position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
+  font-size: 0.6rem; color: var(--ink-muted); white-space: nowrap;
+  font-weight: 500;
+}
+
+/* ===================================
+   PACKING LIST
+   =================================== */
+.pack-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.pack-cat h4 {
+  font-family: var(--font-display); font-weight: 600; font-size: 1rem;
+  color: var(--ink); margin-bottom: 0.4rem;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.pack-cat h4 i { color: var(--lagoon); font-size: 1rem; }
+.pack-list {
+  list-style: none; font-size: 0.8rem; color: var(--ink-soft);
+}
+.pack-list li {
+  padding: 0.2rem 0; display: flex; align-items: baseline; gap: 0.5rem;
+}
+.pack-list li::before {
+  content: ''; display: block; width: 5px; height: 5px; flex-shrink: 0;
+  border-radius: 50%; border: 1.5px solid var(--lagoon);
+  margin-top: 3px;
+}
+
+/* ===================================
+   BACARI LIST
+   =================================== */
+.bacari-list {
+  list-style: none; margin: 0.4rem 0;
+}
+.bacari-list li {
+  padding: 0.35rem 0; border-bottom: 1px solid var(--border);
+  font-size: 0.8rem;
+}
+.bacari-list li:last-child { border-bottom: none; }
+.bacari-name {
+  font-family: var(--font-display); font-weight: 600; font-size: 0.88rem;
+  color: var(--ink);
+}
+.bacari-note {
+  font-size: 0.72rem; color: var(--ink-muted); line-height: 1.35;
+}
+
+/* ===================================
+   DIVIDER
+   =================================== */
+.divider {
+  height: 1px; background: var(--border); margin: 0.8rem 0;
+}
+.divider.short { max-width: 60px; background: var(--lagoon); height: 2px; border-radius: 1px; }
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+@media (max-width: 768px) {
+  .slide {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    align-items: flex-start;
+  }
+  .slide-inner {
+    padding: 2rem 1.2rem 3rem;
+    max-width: 100%;
+  }
+  .two-col, .two-col.wide-left, .two-col.wide-right { grid-template-columns: 1fr; gap: 1rem; }
+  .cards.c2, .cards.c3, .cards.c4 { grid-template-columns: 1fr; }
+  .pack-grid { grid-template-columns: 1fr; }
+  .title-hero { font-size: 3.5rem; }
+  .title-sub { font-size: 1.05rem; }
+  h2.section { font-size: 1.6rem; }
+  .title-dates { flex-direction: column; gap: 0.5rem; }
+  .route-visual {
+    flex-direction: column; align-items: center; gap: 0;
+  }
+  .route-line {
+    width: 2px; height: 24px; min-width: unset;
+  }
+  .route-line .dur {
+    top: 50%; left: auto; right: -70px;
+    transform: translateY(-50%) translateX(0);
+    white-space: nowrap;
+  }
+  .vista { min-height: 160px; }
+  .bg-img { opacity: 0.4; }
+  .bar-label, .bar-keys { display: none; }
+  .bar-dots { gap: 3px; }
+  .bar-dot { width: 6px; height: 6px; }
+  .bar-dot.active { width: 18px; }
+}
+
+/* ===================================
+   PRINT (PDF)
+   =================================== */
+@page { size: 13.333in 7.5in; margin: 0; }
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+  body { overflow: visible !important; height: auto !important; display: block !important; }
+  .carousel { overflow: visible !important; position: static !important; flex: none !important; }
+  .carousel-track { display: block !important; transform: none !important; transition: none !important; height: auto !important; }
+  .slide {
+    width: 13.333in !important; height: 7.5in !important;
+    page-break-after: always !important; break-after: page !important;
+    page-break-inside: avoid !important; break-inside: avoid !important;
+    flex: none !important; display: flex !important; overflow: hidden !important;
+  }
+  .slide:last-child { page-break-after: auto !important; break-after: auto !important; }
+  .slide-inner { max-width: 1100px !important; padding: 0 3rem !important; }
+  .bottom-bar { display: none !important; }
+  .bg-img { position: absolute !important; inset: 0 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .bg-img::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .slide { overflow: hidden !important; align-items: center !important; }
+  .two-col, .two-col.wide-left, .two-col.wide-right { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 2rem !important; }
+  .bg-img { opacity: 1 !important; }
+  .cards.c2 { grid-template-columns: 1fr 1fr !important; }
+  .cards.c3 { grid-template-columns: repeat(3, 1fr) !important; }
+  .cards.c4 { grid-template-columns: repeat(4, 1fr) !important; }
+  .pack-grid { grid-template-columns: 1fr 1fr !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="carousel">
+<div class="carousel-track" id="carousel-track">
+
+<!-- =====================================================================
+     SLIDE 0: TITLE
+     ===================================================================== -->
+<div class="slide title-slide"><div class="slide-inner">
+  <div class="lagoon-deco"></div>
+  <div class="title-label">A spring weekend</div>
+  <h1 class="title-hero">Venice</h1>
+  <p class="title-sub">Two days on the lagoon, one beautiful hotel</p>
+  <div class="title-dates">
+    <span><i class="ti ti-calendar"></i> Saturday 11 &ndash; Sunday 12 April 2026</span>
+    <span><i class="ti ti-plane"></i> London to Venice</span>
+    <span><i class="ti ti-heart"></i> Thomas + Masha</span>
+    <span><i class="ti ti-arrows-split-2"></i> Split return</span>
+  </div>
+</div></div>
+
+<!-- =====================================================================
+     SLIDE 1: THE PLAN
+     ===================================================================== -->
+<div class="slide"><div class="bg-img overlay-left" style="background-image: url('venice-images/backstreet.jpg');"></div><div class="slide-inner">
+  <div class="sn">The Plan</div>
+  <h2 class="section">Two days, one hotel,<br>zero rush</h2>
+  <div class="two-col wide-right" style="margin-top: 0.6rem;">
+    <div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-day">Saturday 11 April</div>
+          <div class="tl-detail">10:15 BA from Heathrow. Arrive 13:30. Water taxi to <span class="tl-place">Ca' di Dio</span>. Afternoon: Dorsoduro. Evening: bacari + dinner.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-day">Saturday night</div>
+          <div class="tl-detail">Get lost in empty Venice after dark. The canals, the reflections, the silence.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-day">Sunday 12 April</div>
+          <div class="tl-detail">Early morning at <span class="tl-place">San Giorgio Maggiore</span>. Rialto Market. Explore Castello. Lunch, last walk.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-day">Sunday evening</div>
+          <div class="tl-detail">Thomas: 19:48 train to <span class="tl-place">Milano Centrale</span>. Masha: 21:35 BA607 to <span class="tl-place">London</span> (or come to Milan too?).</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="route-visual">
+        <div class="route-node"><div class="dot ink"><i class="ti ti-plane-departure"></i></div><span>London</span></div>
+        <div class="route-line"><span class="dur">2h15 flight</span></div>
+        <div class="route-node"><div class="dot lagn"><i class="ti ti-plane-arrival"></i></div><span>Marco Polo</span></div>
+        <div class="route-line"><span class="dur">30min water taxi</span></div>
+        <div class="route-node"><div class="dot blsh"><i class="ti ti-building"></i></div><span>Ca' di Dio</span></div>
+      </div>
+      <div style="margin-top: 0.8rem; display: flex; gap: 0.5rem; font-size: 0.72rem;">
+        <div style="flex:1; padding: 0.4rem 0.6rem; border-radius: 8px; background: var(--blush-light); border: 1px solid var(--blush);">
+          <div style="font-weight: 600; color: var(--ink); margin-bottom: 1px;"><i class="ti ti-train" style="color: var(--blush); font-size: 0.8rem;"></i> Thomas</div>
+          <div style="color: var(--ink-muted);">19:48 train &rarr; Milano Centrale</div>
+        </div>
+        <div style="flex:1; padding: 0.4rem 0.6rem; border-radius: 8px; background: var(--lagoon-light); border: 1px solid var(--lagoon);">
+          <div style="font-weight: 600; color: var(--ink); margin-bottom: 1px;"><i class="ti ti-plane" style="color: var(--lagoon); font-size: 0.8rem;"></i> Masha</div>
+          <div style="color: var(--ink-muted);">21:35 BA607 &rarr; London (arr 22:45)<br><em style="font-size: 0.65rem;">or: join Thomas on the 19:48 to Milan?</em></div>
+        </div>
+      </div>
+      <div style="margin-top: 1.5rem;">
+        <div class="card accent" style="margin-bottom: 0.6rem;">
+          <div class="card-icon"><i class="ti ti-compass"></i></div>
+          <h4>Perfectly placed</h4>
+          <p>Ca' di Dio sits on the Riva degli Schiavoni waterfront, a 2-minute walk from the San Zaccaria vaporetto stop. San Marco, Dorsoduro, Castello, the Arsenale: everything is on foot from there.</p>
+        </div>
+        <div class="card gold-accent">
+          <div class="card-icon gold"><i class="ti ti-walk"></i></div>
+          <h4>Su e Zo per i Ponti</h4>
+          <p>Sunday 12 April is the beloved "Up and Down the Bridges" walking event. Venetians open hidden courtyards and private gardens across the city. A beautiful thing to stumble into.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- =====================================================================
+     SLIDE 2: CA' DI DIO
+     ===================================================================== -->
+<div class="slide"><div class="bg-img overlay-left" style="background-image: url('venice-images/san-giorgio.jpg'); background-position: center 40%;"></div><div class="slide-inner">
+  <div class="sn">Our hotel</div>
+  <h2 class="section">Ca' di Dio</h2>
+  <div class="two-col" style="margin-top: 0.4rem;">
+    <div>
+      <div class="hotel-detail" style="margin-top: 0.3rem;">
+        <span><i class="ti ti-map-pin"></i> Riva degli Schiavoni, Castello</span>
+        <span><i class="ti ti-palette"></i> Patricia Urquiola</span>
+        <span><i class="ti ti-building"></i> VRetreats</span>
+      </div>
+      <p class="lead">A 13th-century pilgrim hospice on the waterfront, reimagined by Patricia Urquiola into one of Venice's most design-forward hotels. 57 rooms. Views straight across to San Giorgio Maggiore.</p>
+      <p>Urquiola layered Murano glass, Venetian terrazzo, custom fabrics, and bold colour into the historic stone shell. The ground floor opens to the lagoon through tall arched windows. Warm, modern, and unmistakably Venetian.</p>
+      <div class="pq" style="margin-top: 0.6rem;">
+        <p>Not a museum, not a stage set. A place where history and design coexist naturally.</p>
+        <cite>Patricia Urquiola</cite>
+      </div>
+    </div>
+    <div>
+      <div class="vista san-giorgio" style="height: 160px; margin-bottom: 0.6rem;">
+        <span class="vista-label">San Giorgio Maggiore from the waterfront</span>
+      </div>
+      <div class="cards c2">
+        <div class="card accent">
+          <div class="card-icon"><i class="ti ti-palette"></i></div>
+          <h4>Urquiola design</h4>
+          <p>Murano glass, terrazzo, bold textiles. Every room different. Contemporary warmth inside ancient walls.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon gold"><i class="ti ti-chef-hat"></i></div>
+          <h4>VERO</h4>
+          <p>Restaurant by Emanuele Scarello (two Michelin stars at Agli Amici). Venetian lagoon cuisine with a modern edge.</p>
+        </div>
+      </div>
+      <div class="cards c2" style="margin-top: 0;">
+        <div class="card">
+          <div class="card-icon blush"><i class="ti ti-eye"></i></div>
+          <h4>The view</h4>
+          <p>San Giorgio Maggiore and the Giudecca canal. Ask for a lagoon-facing room.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="ti ti-walk"></i></div>
+          <h4>Location</h4>
+          <p>Castello waterfront. San Marco 8 min walk. Arsenale 5 min. Dorsoduro across the bridge.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- =====================================================================
+     SLIDE 3: SATURDAY
+     ===================================================================== -->
+<div class="slide"><div class="bg-img overlay-pearl" style="background-image: url('venice-images/gondola.jpg'); background-position: center 30%;"></div><div class="slide-inner">
+  <div class="sn">Saturday 11 April</div>
+  <h2 class="section">Arrive, explore, taste</h2>
+  <p class="lead">Land at 13:30. Water taxi across the lagoon. By 15:00 you're walking through Venice.</p>
+  <div class="cards c3" style="margin-top: 0.6rem;">
+    <div class="card accent">
+      <div class="card-icon"><i class="ti ti-sailboat"></i></div>
+      <h4>Water taxi arrival</h4>
+      <p>Private water taxi from Marco Polo airport straight to the Ca' di Dio dock. 30 minutes across the lagoon. The first view of Venice from the water is unforgettable.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blush"><i class="ti ti-photo"></i></div>
+      <h4>Dorsoduro</h4>
+      <p>Venice's art quarter and most liveable neighbourhood. Start at the Peggy Guggenheim Collection (modern art in a Grand Canal palazzo). Walk to Punta della Dogana for the view.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon gold"><i class="ti ti-glass-full"></i></div>
+      <h4>Bacari crawl</h4>
+      <p>Venice's answer to a wine tour. Stand-up wine bars serving cicchetti (Venetian tapas) and ombre (small glasses of local wine). Hit 3 or 4 between 18:00 and 19:30.</p>
+    </div>
+  </div>
+  <div class="cards c3" style="margin-top: 0;">
+    <div class="card blush-accent">
+      <div class="card-icon blush"><i class="ti ti-moon-stars"></i></div>
+      <h4>Dinner</h4>
+      <p>Osteria da Fiore (Michelin star, legendary Venetian seafood, family-run since the 1970s) or Oro at Belmond Cipriani on the Giudecca. Book today.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="ti ti-route"></i></div>
+      <h4>Get lost at night</h4>
+      <p>After 21:00, Venice empties. The alleys, the bridges, the reflections on still water. Follow your feet. This is the best part of the whole trip.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="ti ti-info-circle"></i></div>
+      <h4>Timing</h4>
+      <p>Peggy Guggenheim closes at 18:00. Bacari are best 17:30-19:30. Dinner reservations from 20:00. The rest is yours.</p>
+    </div>
+  </div>
+</div></div>
+
+<!-- =====================================================================
+     SLIDE 4: SUNDAY
+     ===================================================================== -->
+<div class="slide"><div class="bg-img overlay-pearl" style="background-image: url('venice-images/rialto.jpg'); background-position: center;"></div><div class="slide-inner">
+  <div class="sn">Sunday 12 April</div>
+  <h2 class="section">Morning magic,<br>deeper Venice</h2>
+  <p class="lead">Venice between 7 and 9 in the morning is a different city. Almost empty. Extraordinary light.</p>
+  <div class="cards c4" style="margin-top: 0.6rem;">
+    <div class="card accent">
+      <div class="card-icon"><i class="ti ti-sun-high"></i></div>
+      <h4>San Giorgio Maggiore</h4>
+      <p>7:30 AM. Take the 2-minute vaporetto from San Zaccaria. Climb the bell tower. The single best panoramic view of Venice, with almost nobody there.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon gold"><i class="ti ti-fish"></i></div>
+      <h4>Rialto Market</h4>
+      <p>Open Sunday mornings. The fish market is theatrical: lagoon seafood, shouting vendors, morning light through the arches. Coffee at a bar nearby.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blush"><i class="ti ti-building-fortress"></i></div>
+      <h4>Castello</h4>
+      <p>The eastern end of Venice, where locals actually live. The Arsenale shipyard, Via Garibaldi (Venice's widest street), quiet canals, real neighbourhood bars.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="ti ti-books"></i></div>
+      <h4>Libreria Acqua Alta</h4>
+      <p>A bookshop where books are stored in gondolas, bathtubs, and a full-size boat. Beautifully chaotic. A staircase of books leads to a canal view.</p>
+    </div>
+  </div>
+  <div style="margin-top: 0.5rem; display: flex; gap: 0.6rem;">
+    <div class="card gold-accent" style="flex: 1;">
+      <div style="display:flex; align-items: center; gap: 0.6rem;">
+        <i class="ti ti-walk" style="font-size: 1.1rem; color: var(--gold);"></i>
+        <div>
+          <h4 style="font-family: var(--font-display); font-size: 0.88rem; font-weight: 600; margin-bottom: 1px;">Su e Zo per i Ponti</h4>
+          <p style="font-size: 0.76rem; color: var(--ink-muted); margin: 0;">The walking event runs all day. You'll encounter groups criss-crossing the city, private courtyards opened for the day, hidden gardens. Join a route or just follow the energy.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="flex: 1;">
+      <div style="display:flex; align-items: center; gap: 0.6rem;">
+        <i class="ti ti-arrows-split-2" style="font-size: 1.1rem; color: var(--lagoon);"></i>
+        <div>
+          <h4 style="font-family: var(--font-display); font-size: 0.88rem; font-weight: 600; margin-bottom: 1px;">The split (or not?)</h4>
+          <p style="font-size: 0.76rem; color: var(--ink-muted); margin: 0;">Thomas takes the 19:48 train to Milan. Masha: fly home on the 21:35 BA607, or join Thomas on the train and spend a night in Milan together?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- =====================================================================
+     SLIDE 5: EAT + DRINK
+     ===================================================================== -->
+<div class="slide"><div class="bg-img overlay-pearl-strong" style="background-image: url('venice-images/night.jpg'); background-position: center;"></div><div class="slide-inner">
+  <div class="sn">Where to eat + drink</div>
+  <h2 class="section">Bacari, trattorias,<br>fine dining</h2>
+  <div class="two-col" style="margin-top: 0.6rem;">
+    <div>
+      <h3 class="sub"><i class="ti ti-glass-full" style="color: var(--lagoon); margin-right: 0.3rem;"></i> Bacari (wine bars)</h3>
+      <div class="divider short"></div>
+      <p style="margin-top: 0.4rem; font-size: 0.82rem;">Venice's soul food. Stand at the bar, order an ombra (small wine) and 2-3 cicchetti. Move on. Repeat.</p>
+      <ul class="bacari-list">
+        <li><span class="bacari-name">All'Arco</span><br><span class="bacari-note">Near Rialto. The best crostini in Venice. Arrive by 11:30 or 17:30 for the good stuff.</span></li>
+        <li><span class="bacari-name">Cantina Do Spade</span><br><span class="bacari-note">Open since 1488. Casanova drank here. Try the baccal&agrave; mantecato and the sarde in saor.</span></li>
+        <li><span class="bacari-name">Al Squero</span><br><span class="bacari-note">Tiny bar facing the last working gondola boatyard in Dorsoduro. Aperol spritz with a view.</span></li>
+        <li><span class="bacari-name">El Sbarlefo</span><br><span class="bacari-note">Quiet Castello spot. Locals only feel. Natural wines and creative cicchetti.</span></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="sub"><i class="ti ti-chef-hat" style="color: var(--blush); margin-right: 0.3rem;"></i> Restaurants</h3>
+      <div class="divider short" style="background: var(--blush);"></div>
+      <div class="cards c1" style="grid-template-columns: 1fr; margin-top: 0.5rem;">
+        <div class="card blush-accent">
+          <h4><span class="hotel-tag blush">Michelin</span> Osteria da Fiore</h4>
+          <p>San Polo. One star. Family-run since the 1970s. Venetian lagoon seafood at its finest. Book for Saturday dinner.</p>
+        </div>
+        <div class="card">
+          <h4><span class="hotel-tag blush">Michelin</span> Oro Restaurant</h4>
+          <p>Belmond Cipriani, Giudecca. One star. Creative contemporary Italian. They send a private boat to collect you.</p>
+        </div>
+        <div class="card">
+          <h4><span class="hotel-tag">At the hotel</span> VERO</h4>
+          <p>Chef Emanuele Scarello (2 stars at Agli Amici). Lagoon ingredients, modern technique. Perfect for Sunday lunch before heading to the airport.</p>
+        </div>
+        <div class="card">
+          <h4>Trattoria alla Madonna</h4>
+          <p>Near Rialto. Old-school Venetian. No frills, incredible seafood, reasonable prices. Great for a casual Sunday lunch.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- =====================================================================
+     SLIDE 6: GOOD TO KNOW
+     ===================================================================== -->
+<div class="slide"><div class="bg-img overlay-pearl-strong" style="background-image: url('venice-images/lagoon.jpg'); background-position: center;"></div><div class="slide-inner">
+  <div class="sn">Before we go</div>
+  <h2 class="section">Good to know</h2>
+  <div class="two-col" style="margin-top: 0.6rem;">
+    <div>
+      <h3 class="sub"><i class="ti ti-plane" style="color: var(--lagoon); margin-right: 0.3rem;"></i> Getting there</h3>
+      <div class="divider short"></div>
+      <div class="cards c1" style="grid-template-columns: 1fr; margin-top: 0.5rem;">
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <h4>Saturday 11 April</h4>
+            <span style="font-size: 0.68rem; color: var(--lagoon); font-weight: 600;">10:15 LHR</span>
+          </div>
+          <p>BA to Venice Marco Polo. Arrive 13:30 local.</p>
+          <p style="color: var(--ink-muted); font-size: 0.72rem;">Water taxi from Marco Polo to Ca' di Dio: ~30 min, ~&euro;120. Or Alilaguna Blue Line waterbus: ~1h15, &euro;15pp.</p>
+        </div>
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <h4>Sunday: Thomas</h4>
+            <span style="font-size: 0.68rem; color: var(--blush); font-weight: 600;">19:48</span>
+          </div>
+          <p>Frecciarossa from Venezia Santa Lucia &rarr; Milano Centrale.</p>
+          <p style="color: var(--ink-muted); font-size: 0.72rem;">Vaporetto #2 from San Zaccaria to Santa Lucia: ~25 min. Leave Ca' di Dio by 19:00.</p>
+        </div>
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <h4>Sunday: Masha</h4>
+            <span style="font-size: 0.68rem; color: var(--lagoon); font-weight: 600;">21:35 or 19:48?</span>
+          </div>
+          <p><strong>Option A:</strong> BA607 VCE &rarr; LHR (arr 22:45). Water taxi to Marco Polo, leave by ~19:45.</p>
+          <p><strong>Option B:</strong> Come to Milan on the 19:48 train with Thomas. One night at the apartment, fly home Monday.</p>
+        </div>
+      </div>
+      <div class="card accent" style="margin-top: 0.4rem;">
+        <p style="font-size: 0.74rem; color: var(--ink-soft); margin: 0;"><i class="ti ti-ticket-off" style="color: var(--lagoon);"></i> <strong>Entry fee: exempt.</strong> Venice charges &euro;10 for weekend day-trippers. Overnight guests skip it. Keep the Ca' di Dio booking confirmation on your phone.</p>
+      </div>
+    </div>
+    <div>
+      <h3 class="sub"><i class="ti ti-backpack" style="color: var(--blush); margin-right: 0.3rem;"></i> What to pack</h3>
+      <div class="divider short" style="background: var(--blush);"></div>
+      <div class="pack-grid" style="margin-top: 0.5rem;">
+        <div class="pack-cat">
+          <h4><i class="ti ti-walk"></i> For the day</h4>
+          <ul class="pack-list">
+            <li>Comfortable walking shoes (cobblestones + bridges)</li>
+            <li>Light layers: 16-17&deg;C, sunny spells</li>
+            <li>Sunglasses</li>
+            <li>Small crossbody bag</li>
+          </ul>
+        </div>
+        <div class="pack-cat">
+          <h4><i class="ti ti-shirt"></i> For the evening</h4>
+          <ul class="pack-list">
+            <li>Something nice for dinner (smart-casual)</li>
+            <li>Light jacket for the waterfront</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top: 0.6rem;">
+        <h3 class="sub" style="margin-top: 0;"><i class="ti ti-info-circle" style="color: var(--gold); margin-right: 0.3rem;"></i> Quick tips</h3>
+        <div class="divider short" style="background: var(--gold);"></div>
+        <div style="margin-top: 0.4rem; font-size: 0.78rem; color: var(--ink-soft); line-height: 1.5;">
+          <p style="margin-bottom: 0.3rem;"><strong>Vaporetto:</strong> Buy a 24h ACTV pass (~&euro;25) at the airport or any ACTV booth. Covers all water buses.</p>
+          <p style="margin-bottom: 0.3rem;"><strong>Weather:</strong> 16-17&deg;C, 11+ hours of daylight. Light rain possible. Bring a packable layer.</p>
+          <p style="margin-bottom: 0;"><strong>Cash:</strong> Bacari often prefer cash. Bring &euro;50-100 in small notes.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+</div><!-- /carousel-track -->
+</div><!-- /carousel -->
+
+<!-- BOTTOM NAV BAR -->
+<div class="bottom-bar">
+  <div class="bar-nav"><button class="bar-btn" id="prev-btn" aria-label="Previous">&#8592;</button><button class="bar-btn" id="next-btn" aria-label="Next">&#8594;</button></div>
+  <div class="bar-dots" id="bar-dots"></div>
+  <div class="bar-keys"><kbd>&#8592;</kbd> <kbd>&#8594;</kbd></div>
+  <div class="bar-label" id="bar-label"></div>
+</div>
+
+<script>
+const slideNames = [
+  'Venice',
+  'The Plan',
+  'Ca\u2019 di Dio',
+  'Saturday: Arrive, Explore, Taste',
+  'Sunday: Morning Magic',
+  'Eat + Drink',
+  'Good to Know'
+];
+
+const track = document.getElementById('carousel-track');
+const slides = track.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let currentSlide = 0;
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const dotsC = document.getElementById('bar-dots');
+const labelEl = document.getElementById('bar-label');
+
+slideNames.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'bar-dot';
+  d.onclick = () => goTo(i);
+  dotsC.appendChild(d);
+});
+
+function goTo(idx) {
+  if (idx < 0 || idx >= totalSlides) return;
+  currentSlide = idx;
+  track.style.transform = `translateX(-${idx * 100}%)`;
+  dotsC.querySelectorAll('.bar-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+  labelEl.innerHTML = `<strong>${slideNames[idx]}</strong>`;
+  prevBtn.disabled = idx === 0;
+  nextBtn.disabled = idx === totalSlides - 1;
+}
+
+prevBtn.onclick = () => goTo(currentSlide - 1);
+nextBtn.onclick = () => goTo(currentSlide + 1);
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowRight') { e.preventDefault(); goTo(currentSlide + 1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(currentSlide - 1); }
+});
+
+let touchX = 0, touchY = 0;
+const carousel = document.querySelector('.carousel');
+carousel.addEventListener('touchstart', e => {
+  touchX = e.changedTouches[0].screenX;
+  touchY = e.changedTouches[0].screenY;
+}, { passive: true });
+carousel.addEventListener('touchend', e => {
+  const dx = touchX - e.changedTouches[0].screenX;
+  const dy = touchY - e.changedTouches[0].screenY;
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+    dx > 0 ? goTo(currentSlide + 1) : goTo(currentSlide - 1);
+  }
+}, { passive: true });
+
+goTo(0);
+</script>
+</body>
+</html>
